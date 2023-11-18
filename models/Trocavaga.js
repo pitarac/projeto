@@ -2,12 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db/connection');
 
 const Trocavaga = db.define('trocavaga', {
-  responsavel: {
-    type: Sequelize.STRING,
-  },
-  email: {
-    type: Sequelize.STRING,
-  },
+  
   telefone: {
     type: Sequelize.INTEGER,
   },

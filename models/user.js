@@ -11,26 +11,14 @@ const User = db.define('user', {
         allowNull: false,
         unique: true
     },
-    cidade: {
+    cpf: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     dataNascimento: {
         type: Sequelize.DATEONLY, // Armazena apenas a data, sem a hora
         allowNull: false
-    },
-    escolaAtual: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    escolaDesejada: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    username: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
     },
     password: {
         type: Sequelize.STRING,
