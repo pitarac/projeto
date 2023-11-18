@@ -1,10 +1,16 @@
 const Sequelize = require('sequelize');
-require('dotenv').config(); // Adicione esta linha se estiver usando variáveis de ambiente
+require('dotenv').config();
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: process.env.DATABASE_STORAGE || './db/app.db', // Use variável de ambiente ou caminho padrão
-  // Adicione outras opções de configuração aqui, se necessário
+// Configuração para o PostgreSQL
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 });
 
 module.exports = sequelize;
