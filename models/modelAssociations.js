@@ -1,13 +1,12 @@
-// modelAssociations.js
-
-const User = require('./User')
-const Trocavaga = require('./Trocavaga')
+import User from './User';
+import Trocavaga from './Trocavaga';
 
 // Definindo as associações
-User.hasMany(Trocavaga, { foreignKey: 'userId' })
-Trocavaga.belongsTo(User, { foreignKey: 'userId' })
+User.hasMany(Trocavaga, { foreignKey: 'userId' });
+Trocavaga.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = {
+export {
   User,
   Trocavaga
-}
+};
+

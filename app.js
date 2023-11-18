@@ -92,6 +92,9 @@ app.use('/trocavagas', trocavagasRoutes);
 // Rota de login
 app.get('/login', (req, res) => {
     res.render('login');
+    
+    res.redirect('/login?error=Usuário ou senha inválidos');
+
 });
 
 app.post('/login', passport.authenticate('local', {
@@ -139,6 +142,8 @@ app.post('/register', async (req, res) => {
 });
 
 // Iniciando o servidor
-app.listen(PORT, function () {
-  console.log(`O Express está rodando na porta ${PORT}`);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`O Express está rodando na porta ${PORT}`);
 });
