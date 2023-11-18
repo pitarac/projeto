@@ -76,5 +76,13 @@ router.post('/register', async (req, res) => {
         res.render('register', { error: 'Erro ao criar o usuário.' });
     }
 });
+// Sincronize o modelo User com o banco de dados
+User.sync()
+  .then(() => {
+    console.log('Tabela User sincronizada com o banco de dados.');
+  })
+  .catch((error) => {
+    console.error('Erro ao sincronizar a tabela User:', error);
+  });
 
 module.exports = router;

@@ -31,16 +31,23 @@ app.use(passport.session());
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      let user = await User.findOne({ where: { username } });
+      // Procurar um usuário com base no nome de usuário fornecido
+      const user = await User.findOne({ where: { username } });
+
+      // Se o usuário não for encontrado, retorne uma mensagem de erro
       if (!user) {
         return done(null, false, { message: 'Usuário não encontrado' });
       }
 
-      let passwordIsValid = bcrypt.compareSync(password, user.password);
+      // Verificar se a senha fornecida corresponde à senha armazenada no banco de dados
+      const passwordIsValid = await bcrypt.compare(password, user.password);
+
+      // Se a senha for inválida, retorne uma mensagem de erro
       if (!passwordIsValid) {
         return done(null, false, { message: 'Senha inválida' });
       }
 
+      // Se a autenticação for bem-sucedida, retorne o usuário autenticado
       return done(null, user);
     } catch (error) {
       return done(error);
@@ -62,6 +69,7 @@ passport.deserializeUser(async function (id, done) {
   }
 });
 
+
 // Body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -78,35 +86,62 @@ db.authenticate()
   .then(() => console.log('Conectou ao banco com sucesso'))
   .catch(err => console.log('Ocorreu um erro ao conectar', err));
 
-// Rotas de autenticação
+// Rota de login
 app.get('/login', (req, res) => {
   res.render('login');
 });
 
-app.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: false // Você pode habilitar mensagens de erro, se desejar
-  })
-);
+// Rota para registro
+app.get('/register', (req, res) => {
+  res.render('register'); // Certifique-se de ter uma view 'register'
+});
 
+// Rota para processar o registro
+app.post('/register', async (req, res) => {
+  try {
+      const { nome, email, cidade, dataNascimento, escolaAtual, escolaDesejada, username, password } = req.body;
+      
+      // Verificar se o usuário já existe
+      const userExists = await User.findOne({ where: { username } });
+      if (userExists) {
+          return res.render('register', { error: 'Usuário já existe.' });
+      }
+
+      // Hash da senha
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      // Criar novo usuário
+      const newUser = await User.create({
+          nome,
+          email,
+          cidade,
+          dataNascimento,
+          escolaAtual,
+          escolaDesejada,
+          username,
+          password: hashedPassword
+      });
+
+      res.redirect('/login'); // Redireciona para a página de login após o registro
+  } catch (error) {
+      console.error('Erro ao criar usuário:', error);
+      res.render('register', { error: 'Erro ao criar o usuário.' });
+  }
+});
+
+// Rotas de autenticação
+const authRoutes = require('./routes/auth');
+app.use('/auth', authRoutes);
+
+// Redirecionamento para login
 app.get('/', (req, res) => {
   res.redirect('/login');
 });
 
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
-
 // Outras rotas
 const trocavagasRoutes = require('./routes/trocavagas');
-const authRoutes = require('./routes/auth');
-
 app.use('/trocavagas', trocavagasRoutes);
-app.use('/auth', authRoutes);
 
 // Iniciando o servidor
 app.listen(PORT, function () {
