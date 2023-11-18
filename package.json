@@ -1,15 +1,16 @@
 {
   "name": "troca_vaga",
   "version": "1.0.0",
-  "description": "portal de vagas da educacao basica do DF",
+  "description": "portal de vagas da educação básica do DF",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "keywords": [
     "vagas",
-    "educacao",
-    "basica",
+    "educação",
+    "básica",
     "df",
     "trocavaga",
     "df",
