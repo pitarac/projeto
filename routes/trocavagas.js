@@ -32,8 +32,8 @@ router.get('/profile', (req, res) => {
 })
 
 // form da rota de envio
-router.get('/loguin', (req, res) => {
-  res.render('loguin');
+router.get('/login', (req, res) => {
+  res.render('login');
 })
 
 // add vaga via post
