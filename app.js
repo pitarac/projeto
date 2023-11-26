@@ -7,9 +7,18 @@ const bodyParser = require('body-parser');
 const db = require('./db/connection');
 const authRoutes = require('./auth/routes/authRoutes');
 const userRoutes = require('./users/routes/userRoutes');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+// Configuração do Handlebars para indicar o diretório das views
+app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+
 
 // Configuração da sessão
 app.use(session({
