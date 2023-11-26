@@ -2,13 +2,19 @@ const express = require('express');
 const router = express.Router();
 const Trocavaga = require('../models/Trocavaga');
 
-// Rota para teste
 router.get('/test', (req, res) => {
     res.send('deu certo');
 });
 
-// Detalhe da vaga -> view/1, view/2
-router.get('/view/:id', (req, res) => {
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect('/auth/login');
+    }
+}
+
+router.get('/view/:id', ensureAuthenticated, (req, res) => {
     Trocavaga.findOne({
         where: { id: req.params.id }
     })
@@ -23,23 +29,15 @@ router.get('/view/:id', (req, res) => {
         });
 });
 
-// Formulário de envio
-router.get('/add', (req, res) => {
+router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('add');
 });
 
-// Página de perfil
-router.get('/profile', (req, res) => {
+router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile');
 });
 
-// Página de login (atente-se para a correção do nome da rota)
-router.get('/login', (req, res) => {
-    res.render('login');
-});
-
-// Adicionar vaga via POST
-router.post('/add', (req, res) => {
+router.post('/add', ensureAuthenticated, (req, res) => {
     const {
         responsavel,
         email,
@@ -55,7 +53,6 @@ router.post('/add', (req, res) => {
         new_trocavaga
     } = req.body;
 
-    // Inserir no banco de dados
     Trocavaga.create({
         responsavel,
         email,
