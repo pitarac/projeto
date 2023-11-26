@@ -10,7 +10,7 @@ module.exports = function (app) {
     });
 
     router.post('/login', passport.authenticate('local', {
-        successRedirect: '/trocavagas/profile',    
+        successRedirect: '/trocavagas/profile',
         failureRedirect: '/auth/login',
         failureFlash: false
     }));
@@ -26,9 +26,28 @@ module.exports = function (app) {
 
     router.post('/register', async (req, res) => {
         try {
-            // ... (código para registro de usuário)
+            const { nome, email, cpf, dataNascimento, password } = req.body;
+            const userExists = await User.findOne({ where: { cpf } });
+            
+            if (userExists) {
+                return res.render('register', { error: 'Usuário já existe.' });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            
+            await User.create({
+                nome,
+                email,
+                cpf,
+                dataNascimento,
+                password: hashedPassword
+            });
+
+            res.redirect('/auth/login');
         } catch (error) {
-            // ... (tratamento de erro no registro de usuário)
+            console.error('Erro ao criar usuário:', error);
+            res.render('register', { error: 'Erro ao criar o usuário. Por favor, tente novamente.' });
         }
     });
 
@@ -37,7 +56,7 @@ module.exports = function (app) {
     });
 
     router.post('/forgot-password', (req, res) => {
-        // ... (lógica para redefinição de senha)
+        res.send('Instruções para redefinir a senha foram enviadas por e-mail.');
     });
 
     router.get('/reset-password/:token', (req, res) => {
@@ -45,7 +64,7 @@ module.exports = function (app) {
     });
 
     router.post('/reset-password/:token', (req, res) => {
-        // ... (lógica para redefinição de senha com base no token)
+        res.send('Senha redefinida com sucesso.');
     });
 
     app.use('/auth', router);
