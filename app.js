@@ -16,14 +16,6 @@ const PORT = process.env.PORT || 3000;
 
 require('./models/modelAssociations');
 
-app.use('/models', express.static(path.join(__dirname, 'models')));
-
-
-// Rota principal
-app.get('/', (req, res) => {
-    res.redirect('/auth/login'); // Redireciona para a página de login como rota principal
-});
-
 // Configuração da sessão
 app.use(session({
     secret: 'sua_chave_secreta',
@@ -83,16 +75,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Conexão com o banco de dados
 db.authenticate()
-  .then(() => console.log('Conectou ao banco com sucesso'))
-  .catch(err => console.log('Ocorreu um erro ao conectar', err));
+    .then(() => console.log('Conectou ao banco com sucesso'))
+    .catch(err => console.log('Ocorreu um erro ao conectar', err));
 
 // Rotas
 require('./routes/auth')(app);
 const trocavagasRoutes = require('./routes/trocavagas');
 app.use('/trocavagas', trocavagasRoutes);
-
-// Rota principal (redirecionamento para login)
-// ... (código anterior)
 
 // Rota principal
 app.get('/', (req, res) => {
@@ -103,9 +92,7 @@ app.get('/', (req, res) => {
     }
 });
 
-// ... (restante do código)
-
-
+// Inicia o servidor
 app.listen(PORT, () => {
     console.log(`O Express está rodando na porta ${PORT}`);
 });
