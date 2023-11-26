@@ -84,6 +84,9 @@ const trocavagasRoutes = require('./routes/trocavagas');
 app.use('/trocavagas', trocavagasRoutes);
 
 // Rota principal (redirecionamento para login)
+// ... (código anterior)
+
+// Rota principal
 app.get('/', (req, res) => {
     if (req.isAuthenticated()) {
         res.redirect('/trocavagas'); // Redireciona para a página principal do sistema (ou outra página)
@@ -91,6 +94,9 @@ app.get('/', (req, res) => {
         res.redirect('/auth/login'); // Redireciona para a página de login se o usuário não estiver autenticado
     }
 });
+
+// ... (restante do código)
+
 
 app.listen(PORT, () => {
     console.log(`O Express está rodando na porta ${PORT}`);
