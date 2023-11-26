@@ -24,7 +24,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Inicialização do Passport
+// Inicialização do Passport usando a configuração importada
+const passportConfig = require('./auth/config/passport-config'); // Importa a configuração do Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
