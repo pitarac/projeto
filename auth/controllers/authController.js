@@ -46,11 +46,39 @@ const authController = {
         failureFlash: true // Ativa mensagens flash para exibir erros de autenticação
     }),
 
+    // Controlador para registro de novo usuário
+    async registerUser(cpf, email, birthDate, password) {
+        try {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = await User.create({
+                cpf,
+                email,
+                birthDate,
+                password: hashedPassword,
+                // Outros campos do usuário, se aplicável
+            });
+            return newUser;
+        } catch (error) {
+            throw new Error('Ocorreu um erro durante o registro.', error);
+        }
+    },
+
     // Controlador para logout de usuário
     logoutUser(req, res) {
         req.logout(); // Método para logout do Passport
         res.redirect('/'); // Redireciona para a página inicial após o logout
-    }
+    },
+
+    // Middleware para verificar se o usuário está autenticado
+    isLoggedIn(req, res, next) {
+        if (req.isAuthenticated()) {
+            return next(); // Se autenticado, passa para o próximo middleware
+        }
+        // Se não autenticado, redireciona para a rota de login
+        res.redirect('/login');
+    },
+
+    // ... outras funções do controller, se houver
 };
 
 module.exports = authController;
