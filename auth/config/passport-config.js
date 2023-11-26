@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
+// Definição da estratégia local
 passport.use(new LocalStrategy(
   async (cpf, password, done) => {
     try {
@@ -25,6 +26,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
+// Serialização e desserialização do usuário para sessões
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -38,4 +40,4 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-module.exports = passport;
+module.exports = passport; // Exporta as configurações do Passport
