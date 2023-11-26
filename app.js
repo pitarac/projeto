@@ -84,11 +84,13 @@ const trocavagasRoutes = require('./routes/trocavagas');
 app.use('/trocavagas', trocavagasRoutes);
 
 // Rota principal
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     if (req.isAuthenticated()) {
         res.redirect('/trocavagas'); // Redireciona para a página principal do sistema (ou outra página)
+    } else if (req.path !== '/auth/login') {
+        res.redirect('/auth/login'); // Redireciona para a página de login se o usuário não estiver autenticado e não estiver na página de login
     } else {
-        res.redirect('/auth/login'); // Redireciona para a página de login se o usuário não estiver autenticado
+        next(); // Permite a continuação para a página de login se já estiver na página de login
     }
 });
 
