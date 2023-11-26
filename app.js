@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
-const passport = require('passport');
+const passport = require('./auth/config/passport-config'); // Importa apenas as configurações do Passport
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const db = require('./db/connection');
@@ -17,15 +17,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-// Configuração da sessão
+// Inicialização do Passport usando as configurações importadas
 app.use(session({
     secret: 'sua_chave_secreta',
     resave: false,
     saveUninitialized: true
 }));
-
-// Inicialização do Passport usando a configuração importada
-const passportConfig = require('./auth/config/passport-config'); // Importa a configuração do Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
