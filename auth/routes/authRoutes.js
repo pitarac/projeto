@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../auth/controllers/authController');
+const authController = require('../controllers/authController');
+
 
 // Rota para registro de novo usuário
 router.post('/register', async (req, res) => {
