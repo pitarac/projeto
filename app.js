@@ -8,7 +8,7 @@ const db = require('./db/connection');
 const authRoutes = require('./auth/routes/authRoutes');
 const userRoutes = require('./users/routes/userRoutes');
 const path = require('path');
-const User = require('./models/userModel'); 
+const User = require('./auth/models/userModel'); 
 
 
 const app = express();
