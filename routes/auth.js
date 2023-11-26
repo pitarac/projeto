@@ -11,13 +11,13 @@ module.exports = function (app) {
 
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/',    
-        failureRedirect: '/login', // Redireciona diretamente para '/login' em caso de falha de autenticação
+        failureRedirect: '/auth/login', // Redireciona para '/auth/login' em caso de falha de autenticação
         failureFlash: false
     }));
 
     router.get('/logout', (req, res) => {
         req.logout();
-        res.redirect('/login');
+        res.redirect('/auth/login');
     });
 
     router.get('/register', (req, res) => {
@@ -44,7 +44,7 @@ module.exports = function (app) {
                 password: hashedPassword
             });
 
-            res.redirect('/login');
+            res.redirect('/auth/login');
         } catch (error) {
             console.error('Erro ao criar usuário:', error);
             res.render('register', { error: 'Erro ao criar o usuário. Por favor, tente novamente.' });
