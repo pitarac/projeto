@@ -10,8 +10,8 @@ module.exports = function (app) {
     });
 
     router.post('/login', passport.authenticate('local', {
-        successRedirect: '/',    
-        failureRedirect: '/auth/login', // Redireciona para '/auth/login' em caso de falha de autenticação
+        successRedirect: '/profile',    
+        failureRedirect: '/auth/login',
         failureFlash: false
     }));
 
@@ -51,7 +51,7 @@ module.exports = function (app) {
         }
     });
 
-    router.get('/forgot-password', (req, res) => {
+   router.get('/forgot-password', (req, res) => {
         res.render('forgot-password');
     });
 
@@ -64,7 +64,8 @@ module.exports = function (app) {
     });
 
     router.post('/reset-password/:token', (req, res) => {
-        res.send('Senha redefinida com sucesso.');
+               res.send('Senha redefinida com sucesso.');
+
     });
 
     app.use('/auth', router);
