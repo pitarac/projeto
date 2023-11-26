@@ -8,6 +8,8 @@ const db = require('./db/connection');
 const authRoutes = require('./auth/routes/authRoutes');
 const userRoutes = require('./users/routes/userRoutes');
 const path = require('path');
+const User = require('./models/userModel'); 
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,7 +42,7 @@ db.authenticate()
 
 // Rota para a raiz do domínio
 app.get('/', (req, res) => {
-    res.render('/trocavagas/profile'); // Renderiza a view 'index' ao acessar a raiz do domínio
+    res.render('/trocavagas/profile'); 
 });
 
 // Inicia o servidor
