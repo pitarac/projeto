@@ -102,10 +102,11 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/login', // Redireciona para o login se falhar
     failureFlash: false
-}));
+}), (req, res) => {
+    res.redirect('/'); // Redireciona para a página inicial se o login for bem-sucedido
+});
 
 // Rota de logout
 app.get('/logout', (req, res) => {
