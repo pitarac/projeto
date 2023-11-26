@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 require('./models/modelAssociations');
 
+app.use('/models', express.static(path.join(__dirname, 'models')));
 
 
 // Rota principal
