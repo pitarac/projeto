@@ -1,4 +1,4 @@
-const User = require('../models/User'); // Supondo que o modelo do usuário seja importado corretamente
+const User = require('../models/userModel'); // Supondo que o modelo do usuário seja importado corretamente
 
 const userController = {
     // Função para obter informações de um usuário pelo CPF
