@@ -1,32 +1,6 @@
 require('dotenv').config();
 
-const express = require('express');
-const exphbs = require('express-handlebars');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const Sequelize = require('sequelize');
-const db = require('./db/connection');
-const User = require('./models/User'); // Modelo de usuário
-const path = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-require('./models/modelAssociations');
-
-// Configuração da sessão
-app.use(session({
-    secret: 'sua_chave_secreta',
-    resave: false,
-    saveUninitialized: true
-}));
-
-// Inicialização do Passport
-app.use(passport.initialize());
-app.use(passport.session());
 
 const express = require('express');
 const exphbs = require('express-handlebars');
