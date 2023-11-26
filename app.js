@@ -28,6 +28,40 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+const express = require('express');
+const exphbs = require('express-handlebars');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
+const db = require('./db/connection');
+const User = require('./models/User'); // Modelo de usuário
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware para verificar se o usuário está autenticado
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next(); // Avança para a próxima etapa
+    }
+    res.redirect('/login'); // Redireciona para a página de login se não estiver autenticado
+}
+
+// Configuração da sessão
+app.use(session({
+    secret: 'sua_chave_secreta',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Inicialização do Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Configuração da estratégia local do Passport
 passport.use(new LocalStrategy({ usernameField: 'cpf' }, async (cpf, password, done) => {
     try {
@@ -76,27 +110,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Conexão com o banco de dados
 db.authenticate()
-  .then(() => console.log('Conectou ao banco com sucesso'))
-  .catch(err => console.log('Ocorreu um erro ao conectar', err));
+    .then(() => console.log('Conectou ao banco com sucesso'))
+    .catch(err => console.log('Ocorreu um erro ao conectar', err));
 
 // Rotas
 require('./routes/auth')(app);
 
-// Rota principal (Redirecionamento para login)
-app.get('/', (req, res) => {
-    res.redirect('/login');
+// Rota principal (Redirecionamento para login se não estiver autenticado)
+app.get('/', ensureAuthenticated, (req, res) => {
+    // Renderizar a página principal aqui após a autenticação
+    res.render('home');
 });
-
-// Outras rotas (exemplo: trocavagas)
-const trocavagasRoutes = require('./routes/trocavagas');
-app.use('/trocavagas', trocavagasRoutes);
 
 // Rota de login
 app.get('/login', (req, res) => {
     res.render('login');
-    
-    res.redirect('/login?error=Usuário ou senha inválidos');
-
 });
 
 app.post('/login', passport.authenticate('local', {
@@ -143,8 +171,9 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
-
+// Iniciar o servidor
 app.listen(PORT, () => {
     console.log(`O Express está rodando na porta ${PORT}`);
 });
+
+
