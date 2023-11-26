@@ -42,7 +42,7 @@ db.authenticate()
 
 // Rota para a raiz do domínio
 app.get('/', (req, res) => {
-    res.render('index'); // Renderiza a view 'index' ao acessar a raiz do domínio
+    res.render('/trocavagas/profile'); // Renderiza a view 'index' ao acessar a raiz do domínio
 });
 
 // Inicia o servidor
