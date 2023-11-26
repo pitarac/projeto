@@ -10,7 +10,7 @@ module.exports = function (app) {
     });
 
     router.post('/login', passport.authenticate('local', {
-        successRedirect: '/profile',    
+        successRedirect: '/trocavagas/profile',    
         failureRedirect: '/auth/login',
         failureFlash: false
     }));
@@ -26,37 +26,18 @@ module.exports = function (app) {
 
     router.post('/register', async (req, res) => {
         try {
-            const { nome, email, cpf, dataNascimento, password } = req.body;
-            const userExists = await User.findOne({ where: { cpf } });
-            
-            if (userExists) {
-                return res.render('register', { error: 'Usuário já existe.' });
-            }
-
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            
-            await User.create({
-                nome,
-                email,
-                cpf,
-                dataNascimento,
-                password: hashedPassword
-            });
-
-            res.redirect('/auth/login');
+            // ... (código para registro de usuário)
         } catch (error) {
-            console.error('Erro ao criar usuário:', error);
-            res.render('register', { error: 'Erro ao criar o usuário. Por favor, tente novamente.' });
+            // ... (tratamento de erro no registro de usuário)
         }
     });
 
-   router.get('/forgot-password', (req, res) => {
+    router.get('/forgot-password', (req, res) => {
         res.render('forgot-password');
     });
 
     router.post('/forgot-password', (req, res) => {
-        res.send('Instruções para redefinir a senha foram enviadas por e-mail.');
+        // ... (lógica para redefinição de senha)
     });
 
     router.get('/reset-password/:token', (req, res) => {
@@ -64,8 +45,7 @@ module.exports = function (app) {
     });
 
     router.post('/reset-password/:token', (req, res) => {
-               res.send('Senha redefinida com sucesso.');
-
+        // ... (lógica para redefinição de senha com base no token)
     });
 
     app.use('/auth', router);
