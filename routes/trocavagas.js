@@ -2,10 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Trocavaga = require('../models/Trocavaga');
 
-router.get('/test', (req, res) => {
-    res.send('deu certo');
-});
-
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -13,6 +9,10 @@ function ensureAuthenticated(req, res, next) {
         res.redirect('/auth/login');
     }
 }
+
+router.get('/test', (req, res) => {
+    res.send('deu certo');
+});
 
 router.get('/view/:id', ensureAuthenticated, (req, res) => {
     Trocavaga.findOne({
@@ -33,10 +33,6 @@ router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('add');
 });
 
-router.get('/profile', ensureAuthenticated, (req, res) => {
-    res.render('profile');
-});
-
 router.post('/add', ensureAuthenticated, (req, res) => {
     const {
         responsavel,
@@ -53,6 +49,7 @@ router.post('/add', ensureAuthenticated, (req, res) => {
         new_trocavaga
     } = req.body;
 
+    // Inserir no banco de dados
     Trocavaga.create({
         responsavel,
         email,
@@ -74,6 +71,10 @@ router.post('/add', ensureAuthenticated, (req, res) => {
             console.log(err);
             res.status(500).send('Erro ao adicionar a vaga');
         });
+});
+
+router.get('/profile', ensureAuthenticated, (req, res) => {
+    res.render('profile');
 });
 
 module.exports = router;
