@@ -1,12 +1,11 @@
-import User from './User';
-import Trocavaga from './Trocavaga';
+const User = require('./User');
+const Trocavaga = require('./Trocavaga');
 
 // Definindo as associações
 User.hasMany(Trocavaga, { foreignKey: 'userId' });
 Trocavaga.belongsTo(User, { foreignKey: 'userId' });
 
-export {
+module.exports = {
   User,
   Trocavaga
 };
-
