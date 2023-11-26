@@ -16,6 +16,13 @@ const PORT = process.env.PORT || 3000;
 
 require('./models/modelAssociations');
 
+
+
+// Rota principal
+app.get('/', (req, res) => {
+    res.redirect('/auth/login'); // Redireciona para a página de login como rota principal
+});
+
 // Configuração da sessão
 app.use(session({
     secret: 'sua_chave_secreta',
