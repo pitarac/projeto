@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const authController = require('../auth/controllers/authController');
+const User = require('../../models/userModel'); // Importando o modelo de usuário
 
 // Rota protegida para atualizar informações do usuário pelo CPF
 router.put('/update/:cpf', authController.ensureAuthenticated, async (req, res) => {
