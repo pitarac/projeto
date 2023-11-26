@@ -55,47 +55,29 @@ module.exports = function(app) {
 
         console.log("Dados recebidos:", req.body);
     });
-    
-// Rota de login
-router.get('/login', (req, res) => {
-  res.render('login'); // Certifique-se de ter uma view 'login'
-});
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/',    // Redireciona para a página inicial após login bem-sucedido
-  failureRedirect: '/login', // Redireciona de volta para a página de login se falhar
-  failureFlash: false       // Configuração para mensagens de erro, se necessário
-}));
+    // Rota para solicitar redefinição de senha
+    router.get('/forgot-password', (req, res) => {
+        res.render('forgot-password'); // Certifique-se de ter uma view para isso
+    });
 
-// Rota de logout
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
-});
+    // Rota para processar a solicitação de redefinição de senha
+    router.post('/forgot-password', (req, res) => {
+        // Aqui você implementaria a lógica para enviar o e-mail
+        res.send('Instruções para redefinir a senha foram enviadas por e-mail.');
+    });
 
-// Rota para solicitar redefinição de senha
-router.get('/forgot-password', (req, res) => {
-res.render('forgot-password'); // Certifique-se de ter uma view para isso
-});
+    // Rota para o formulário de redefinição de senha
+    router.get('/reset-password/:token', (req, res) => {
+        // Verificar o token e mostrar o formulário de redefinição
+        res.render('reset-password', { token: req.params.token });
+    });
 
-// Rota para processar a solicitação de redefinição de senha
-router.post('/forgot-password', (req, res) => {
-// Aqui você implementaria a lógica para enviar o e-mail
-res.send('Instruções para redefinir a senha foram enviadas por e-mail.');
-});
+    // Rota para processar a redefinição de senha
+    router.post('/reset-password/:token', (req, res) => {
+        // Aqui você implementaria a lógica de redefinição de senha
+        res.send('Senha redefinida com sucesso.');
+    });
 
-// Rota para o formulário de redefinição de senha
-router.get('/reset-password/:token', (req, res) => {
-// Verificar o token e mostrar o formulário de redefinição
-res.render('reset-password', { token: req.params.token });
-});
-
-// Rota para processar a redefinição de senha
-router.post('/reset-password/:token', (req, res) => {
-// Aqui você implementaria a lógica de redefinição de senha
-res.send('Senha redefinida com sucesso.');
-});
-
-app.use('/auth', router);
+    app.use('/auth', router);
 };
-
