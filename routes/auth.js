@@ -7,16 +7,20 @@ const router = express.Router();
 module.exports = function (app) {
     router.get('/login', (req, res) => {
         res.render('login');
+        isLoggedIn = true;
+
     });
 
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/trocavagas/profile',
         failureRedirect: '/auth/login',
         failureFlash: false
+        
     }));
 
     router.get('/logout', (req, res) => {
         req.logout();
+        isLoggedIn = false;
         res.redirect('/auth/login');
     });
 

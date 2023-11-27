@@ -75,6 +75,11 @@ router.post('/add', ensureAuthenticated, (req, res) => {
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile');
+    if (isLoggedIn) {
+        res.send('Página do Perfil - Usuário Logado');
+      } else {
+        res.send('Você precisa estar logado para acessar esta página');
+      }
 });
 
 module.exports = router;
