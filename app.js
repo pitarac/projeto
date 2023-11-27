@@ -10,11 +10,18 @@ const Sequelize = require('sequelize');
 const db = require('./db/connection');
 const User = require('./models/User');
 const path = require('path');
+const mime = require('mime-types');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 require('./models/modelAssociations');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
 
 // Configuração da sessão
 app.use(session({

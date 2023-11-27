@@ -1,8 +1,15 @@
 const Sequelize = require('sequelize');
 const db = require('../db/connection');
+const User = require('./User');
 
 const Trocavaga = db.define('trocavaga', {
-  
+  userId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: 'User',
+      key: 'id'
+    }
+  },
   telefone: {
     type: Sequelize.INTEGER,
   },
@@ -35,4 +42,17 @@ const Trocavaga = db.define('trocavaga', {
   }
 });
 
-module.exports = Trocavaga
+// Definindo a associação
+
+// Sincronize o modelo com o banco de dados
+Trocavaga.sync()
+  .then(() => {
+    console.log('Modelo Trocavaga sincronizado com o banco de dados.');
+    Trocavaga.belongsTo(User, { foreignKey: 'userId' });
+
+  })
+  .catch(error => {
+    console.error('Erro ao sincronizar o modelo Trocavaga:', error);
+  });
+
+module.exports = Trocavaga;

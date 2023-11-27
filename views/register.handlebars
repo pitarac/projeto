@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Registrar</title>
 </head>
+
 <body>
-    <form action="/register" method="POST" id="form-cpf">
+    <form action="/auth/register" method="POST" id="form-cpf">
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required autocomplete="name">
 
@@ -13,7 +15,8 @@
         <input type="email" id="email" name="email" required autocomplete="email">
 
         <label for="cpf">CPF (será usado como usuário):</label>
-        <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required onchange="verificaCPF()" autocomplete="cpf">
+        <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required onchange="verificaCPF()"
+            autocomplete="cpf">
 
         <label for="dataNascimento">Data de Nascimento:</label>
         <input type="date" id="dataNascimento" name="dataNascimento" required autocomplete="bday">
@@ -25,9 +28,9 @@
         <button type="submit">Registrar</button>
     </form>
 
-    <script src="valida-cpf.js"></script>
-    <script>
-        window.onload = function() {
+    <!-- <script src="./js/valida-cpf.js"></script>
+   <script>
+        window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const error = urlParams.get('error');
             const success = urlParams.get('success');
@@ -40,6 +43,7 @@
                 document.getElementById('resultado').style.color = 'green';
             }
         }
-    </script>
+    </script> -->
 </body>
+
 </html>

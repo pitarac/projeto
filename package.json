@@ -27,6 +27,7 @@
     "express-handlebars": "^7.1.2",
     "express-session": "^1.17.3",
     "firebase": "^10.5.2",
+    "mime": "^3.0.0",
     "nodemailer": "^6.4.17",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
