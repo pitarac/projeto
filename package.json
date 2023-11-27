@@ -1,7 +1,7 @@
 {
   "name": "troca_vaga",
   "version": "1.0.0",
-  "description": "portal de vagas da educação básica do DF",
+  "description": "Portal de vagas da educação básica do DF",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
@@ -17,7 +17,7 @@
     "vaga",
     "df"
   ],
-  "author": "\"Adison <adison.asg@gmail.com>, Julio <juliocezar@gmail.com>",
+  "author": "\"Adison <adison.asg@gmail.com>, Julio <juliocezargd@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

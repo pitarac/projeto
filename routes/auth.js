@@ -7,15 +7,14 @@ const router = express.Router();
 module.exports = function (app) {
     router.get('/login', (req, res) => {
         res.render('login');
-        isLoggedIn = true;
-
+        { isLoggedIn: req.isAuthenticated() }
     });
 
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/trocavagas/profile',
         failureRedirect: '/auth/login',
         failureFlash: false
-        
+
     }));
 
     router.get('/logout', (req, res) => {
@@ -26,20 +25,24 @@ module.exports = function (app) {
 
     router.get('/register', (req, res) => {
         res.render('register');
+        successMessage: req.session.successMessage || '', // Define um valor inicial vazio caso não haja mensagem
+            errorMessage: req.session.errorMessage
     });
+
 
     router.post('/register', async (req, res) => {
         try {
             const { nome, email, cpf, dataNascimento, password } = req.body;
             const userExists = await User.findOne({ where: { cpf } });
-            
+
             if (userExists) {
-                return res.render('register', { error: 'Usuário já existe.' });
+                req.session.errorMessage = 'Usuário já existe.';
+                return res.redirect('/auth/register');
             }
 
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
-            
+
             await User.create({
                 nome,
                 email,
@@ -48,10 +51,14 @@ module.exports = function (app) {
                 password: hashedPassword
             });
 
+
+            req.session.successMessage = 'Usuário criado com sucesso! Faça login para continuar.';
             res.redirect('/auth/login');
         } catch (error) {
             console.error('Erro ao criar usuário:', error);
-            res.render('register', { error: 'Erro ao criar o usuário. Por favor, tente novamente.' });
+
+            req.session.errorMessage = 'Erro ao criar o usuário. Por favor, tente novamente.';
+            res.redirect('/auth/register');
         }
     });
 

@@ -7,6 +7,18 @@
 </head>
 
 <body>
+    {{#if successMessage}}
+    <div class="alert alert-success" role="alert">
+        {{successMessage}}
+    </div>
+    {{/if}}
+
+    {{#if errorMessage}}
+    <div class="alert alert-danger" role="alert">
+        {{errorMessage}}
+    </div>
+    {{/if}}
+
     <form action="/auth/register" method="POST" id="form-cpf">
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required autocomplete="name">
@@ -27,6 +39,12 @@
         <p id="resultado"></p>
         <button type="submit">Registrar</button>
     </form>
+
+
+
+
+
+
 
     <!-- <script src="./js/valida-cpf.js"></script>
    <script>
