@@ -21,7 +21,7 @@ module.exports = function (app) {
     router.get('/logout', (req, res) => {
         req.logout();
         isLoggedIn = false;
-        res.redirect('/auth/login');
+        res.redirect('/index');
     });
 
     router.get('/register', (req, res) => {
