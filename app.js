@@ -12,8 +12,16 @@ const User = require('./models/User');
 const path = require('path');
 const mime = require('mime-types');
 
+const router = express.Router();
+const fetchUserCPF = require('../middleware/fetchUserCPF');
+
+
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Aplica o middleware globalmente para todas as rotas
+router.use(fetchUserCPF);
 
 require('./models/modelAssociations');
 
@@ -29,6 +37,18 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+// Middleware para mensagens
+app.use((req, res, next) => {
+    res.locals.successMessage = req.session.successMessage;
+    res.locals.errorMessage = req.session.errorMessage;
+    delete req.session.successMessage;
+    delete req.session.errorMessage;
+    next();
+  });
+
+
+
 
 // Inicialização do Passport
 app.use(passport.initialize());
