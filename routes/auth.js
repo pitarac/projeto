@@ -24,9 +24,10 @@ module.exports = function (app) {
     });
 
     router.get('/register', (req, res) => {
-        res.render('register');
-        successMessage: req.session.successMessage || '', // Define um valor inicial vazio caso não haja mensagem
-            errorMessage: req.session.errorMessage
+        res.render('register', {
+            successMessage: req.session.successMessage || '', // Define um valor inicial vazio caso não haja mensagem
+            errorMessage: req.session.errorMessage || ''
+        });
     });
 
 

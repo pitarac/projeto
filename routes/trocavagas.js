@@ -3,7 +3,7 @@ const router = express.Router();
 const Trocavaga = require('../models/Trocavaga');
 
 function ensureAuthenticated(req, res, next) {
-    if ( isLoggedIn: req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         return next();
     } else {
         res.redirect('auth/login');
