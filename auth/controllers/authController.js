@@ -2,6 +2,41 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/userModel');
+// Configuração da estratégia local do Passport
+passport.use(new LocalStrategy({ usernameField: 'cpf' }, async (cpf, password, done) => {
+    try {
+        const user = await User.findOne({ where: { cpf } });
+
+        if (!user) {
+            return done(null, false, { message: 'Usuário não encontrado.' });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (isMatch) {
+            return done(null, user);
+        } else {
+            return done(null, false, { message: 'Senha inválida.' });
+        }
+    } catch (error) {
+        return done(error);
+    }
+}));
+
+// Serialização e desserialização do usuário para sessões
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findByPk(id);
+        done(null, user);
+    } catch (error) {
+        done(error, null);
+    }
+});
+
 
 // Configuração da estratégia local do Passport
 passport.use(new LocalStrategy({ usernameField: 'cpf' }, async (cpf, password, done) => {
