@@ -13,7 +13,7 @@ const path = require('path');
 const mime = require('mime-types');
 
 const router = express.Router();
-const fetchUserCPF = require('../middleware/fetchUserCPF');
+const fetchUserCPF = require('./middleware/fetchUserCPF');
 
 
 
