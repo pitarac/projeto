@@ -1,13 +1,12 @@
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
+const path = require('path');
 
-// Configuração para o PostgreSQL
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  protocol: 'postgres',
-  dialectOptions: {
-    ssl:false
-  }
+const dbPath = path.join(__dirname, 'data', 'database.sqlite');
+
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: dbPath,
 });
 
 module.exports = sequelize;

@@ -2,19 +2,18 @@ const express = require('express');
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const ensureNotAuthenticated = require('../middleware/ensureNotAuthenticated');
 const router = express.Router();
 
 module.exports = function (app) {
-    router.get('/login', (req, res) => {
-        res.render('login');
-        { isLoggedIn: req.isAuthenticated() }
+    router.get('/login', ensureNotAuthenticated, (req, res) => {
+        res.render('login', { isLoggedIn: req.isAuthenticated() });
     });
 
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/trocavagas/profile',
         failureRedirect: '/auth/login',
         failureFlash: false
-
     }));
 
     router.get('/logout', (req, res) => {
@@ -23,9 +22,9 @@ module.exports = function (app) {
         res.redirect('/index');
     });
 
-    router.get('/register', (req, res) => {
+    router.get('/register', ensureNotAuthenticated, (req, res) => {
         res.render('register', {
-            successMessage: req.session.successMessage || '', // Define um valor inicial vazio caso não haja mensagem
+            successMessage: req.session.successMessage || '',
             errorMessage: req.session.errorMessage || ''
         });
     });
