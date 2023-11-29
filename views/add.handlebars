@@ -7,7 +7,16 @@
     </div>
     <div id="form-box" class="col-md-12">
       <h2>Preencha os dados do Responsável:</h2>
-      <form action="/trocavagas/add" method="POST">
+     <!-- Verifique se há uma mensagem de sucesso e exiba-a na página -->
+{{#if success}}
+    <p>{{success}}</p>
+{{/if}}
+     
+      <!-- Verifique se há um erro e exiba-o na página -->
+{{#if error}}
+    <p>{{error}}</p>
+{{/if}}
+      <form action="./add" method="POST">
 
         <div class="form-group">
           <label for="responsavel">Nome do Responsável:</label>
