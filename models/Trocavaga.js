@@ -2,8 +2,7 @@
 
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../db/connection');
-const User = require('./User'); // Importe o modelo User
-
+const User = require('../models/User');
 class Trocavaga extends Model {}
 
 Trocavaga.init(
