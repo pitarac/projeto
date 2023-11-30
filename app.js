@@ -11,8 +11,10 @@ const User = require('./models/User');
 const Trocavaga = require('./models/Trocavaga');
 const session = require('express-session');
 
-const router = express.Router();
-const fetchUserCPF = require('./middleware/fetchUserCPF');
+const authRouter = require('./routes/auth');
+
+//const router = express.Router();
+//const fetchUserCPF = require('./middleware/fetchUserCPF');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,7 +26,9 @@ const PORT = process.env.PORT || 3000;
 app.use(session({
     secret: 'sua_chave_secreta',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {maxAge: 70 * 60 * 1000 },
+   // store: 
 }));
 
 // Inicialização do Passport
@@ -103,14 +107,14 @@ app.use(express.static(path.join(__dirname, 'public')));
         console.error('Erro ao conectar e sincronizar modelos:', error);
     }
 })();
-// Rotas
-require('./routes/auth')(app);
-const trocavagasRoutes = require('./routes/trocavagas');
-app.use('/trocavagas', trocavagasRoutes);
+
+// Use as rotas de autenticação
+app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
     res.render('index'); // Renderiza a view 'index' ao acessar a raiz do domínio
 });
+
 
 
 

@@ -14,43 +14,29 @@
 <body>
   <header>
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">
-        <div id="img-navbar" class="col-md-12">
-          <img src="/img/TrocaVaga.jpg" alt="TrocaVaga">
-        </div>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <!-- Your Navbar Code -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            {{cpf}}
-            <!-- Botão/link de perfil -->
-            <a class="nav-link" href="/perfil">Perfil</a>
-
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="/">Vagas Disponíveis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-primary" href="./add">Cadastrar Vaga</a>
+            <a class="nav-link btn btn-primary" href="/auth/add">Cadastrar Vaga</a>
+          </li>
           <li class="nav-item">
-            <!-- Botão/link de login -->
             {{#if isLoggedIn}}
-            <!-- Botão/link de logout -->
-            <a href="auth/logout">SAIR</a>
+              <a href="/auth/logout">SAIR</a>
             {{else}}
-
-            <a href="/auth/login">Entrar</a>
+              <a href="/auth/login">Entrar</a>
             {{/if}}
           </li>
         </ul>
       </div>
     </nav>
   </header>
+  
   {{{ body }}}
+  
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
