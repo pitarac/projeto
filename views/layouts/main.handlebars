@@ -11,23 +11,40 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 
+
 <body>
   <header>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-      <!-- Your Navbar Code -->
+   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">
+        <div id="img-navbar" class="col-md-12">
+          <img src="/img/logonova.png" alt="TrocaVaga">
+        </div>
+      </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/view">Vagas Disponíveis</a>
+            {{cpf}}
+            <!-- Botão/link de perfil -->
+            <a class="nav-link" href="/perfil">Perfil</a>
+           
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-primary" href="/auth/add">Cadastrar Vaga</a>
+            <a class="nav-link" href="/">Vagas Disponíveis</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link btn btn-primary" href="Trocavaga/add">Cadastrar Vaga</a>
+          <li class="nav-link">
+            <!-- Botão/link de login -->
             {{#if isLoggedIn}}
-              <a href="/auth/logout">SAIR</a>
+            <!-- Botão/link de logout -->
+            <a href="auth/logout">SAIR</a>
             {{else}}
-              <a href="/auth/login">Entrar</a>
+            
+            <a href="/auth/login">Entrar</a>
             {{/if}}
           </li>
         </ul>

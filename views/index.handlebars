@@ -10,31 +10,26 @@
     </div>
   </form>
 </div>
-
 <main>
   <div id="trocavagas-container" class="container">
     <div class="row">
       <div class="col-md-12">
         {{#if search}}
-          <h2 id="trocavaga-list-title">Resultados da Busca: "{{search}}"</h2>
+          <h2 id="trocavaga-list-title">Buscando vagas que contem: {{search}}</h2>
         {{else}}
           <h2 id="trocavaga-list-title">Veja as nossas vagas em destaque</h2>
         {{/if}}
         <ul id="trocavaga-list" class="list-group">
-          {{#if trocavagas}}
-            {{#each trocavagas}}
-              <li class="list-group-item {{#if dataValues.new_trocavaga }}new-trocavaga{{/if}}">
-                <img src="/img/company.svg" alt="Company">
-                <p><b>Série: </b>{{dataValues.serie_ano}}</p>
-                <h5><b>Origem: </b>{{dataValues.escola_origem}} - {{dataValues.regiao_origem}}</h5>
-                <p><b>Destino: </b>{{dataValues.escola_destino}} - {{dataValues.regiao_destino}}</p>
-                <span class="new-trocavaga-label">Nova</span>
-                <a class="btn btn-primary" href="/trocavagas/view/{{dataValues.id}}">Ver vaga</a>
-              </li>
-            {{/each}}
-          {{else}}
-            <p>Nenhum resultado encontrado.</p>
-          {{/if}}
+          {{#each trocavagas}}
+            <li class="list-group-item {{#if dataValues.new_trocavaga }}new-trocavaga{{/if}}">
+              <img src="/img/company.svg" alt="Company">
+              <p><b>Série: </b>{{dataValues.serie_ano}}</p>
+              <h5><b>Origem: </b>{{dataValues.escola_origem}} - {{dataValues.regiao_origem}}</h5>
+              <p><b>Destino: </b>{{dataValues.escola_destino}} - {{dataValues.regiao_destino}}</p>
+              <span class="new-trocavaga-label">Nova</span>
+              <a class="btn btn-primary" href="/trocavagas/view/{{dataValues.id}}">Ver vaga</a>
+            </li>
+          {{/each}}
         </ul>
       </div>
     </div>
