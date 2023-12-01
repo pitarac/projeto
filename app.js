@@ -11,14 +11,13 @@ const User = require('./models/User');
 const Trocavaga = require('./models/Trocavaga');
 const session = require('express-session');
 
-const authRouter = require('./routes/auth');
+const authRoutes = require('./routes/auth');
 
 //const router = express.Router();
 //const fetchUserCPF = require('./middleware/fetchUserCPF');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 
 
@@ -35,6 +34,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Use as rotas de autenticação
+app.use('/auth', authRoutes);
 
 
 
@@ -100,20 +101,53 @@ app.use(express.static(path.join(__dirname, 'public')));
         console.log('Modelos sincronizados com o banco de dados.');
 
         // Inicia o servidor após a sincronização
-        app.listen(PORT, () => {
+        const server = app.listen(PORT, () => {
             console.log(`O Express está rodando na porta ${PORT}`);
+        });
+
+        // Manipulador de eventos para lidar com erros no servidor
+        server.on('error', (err) => {
+            console.error('Erro no servidor:', err);
+            // Faça algo com o erro, se necessário
         });
     } catch (error) {
         console.error('Erro ao conectar e sincronizar modelos:', error);
     }
 })();
 
-// Use as rotas de autenticação
-app.use('/auth', authRouter);
 
-app.get('/', (req, res) => {
-    res.render('index'); // Renderiza a view 'index' ao acessar a raiz do domínio
-});
+
+app.get('/', async (req, res) => {
+    try {
+      let search = req.query.trocavaga;
+      let query = '%' + search + '%';
+  
+      let trocavagas;
+  
+      if (!search) {
+        trocavagas = await Trocavaga.findAll({
+          order: [['createdAt', 'DESC']]
+        });
+      } else {
+        trocavagas = await Trocavaga.findAll({
+          where: {
+            [Op.or]: [
+              { escola_origem: { [Op.like]: query } },
+              { escola_destino: { [Op.like]: query } },
+              { regiao_origem: { [Op.like]: query } },
+              { regiao_destino: { [Op.like]: query } }
+            ]
+          },
+          order: [['createdAt', 'DESC']]
+        });
+      }
+  
+      res.render('index', { trocavagas, search });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Erro ao buscar trocavagas');
+    }
+  });
 
 
 

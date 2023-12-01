@@ -1,24 +1,59 @@
 const bcrypt = require('bcryptjs');
+const express = require('express');
+
 const User = require('../models/User');
 const passport = require('passport');
 const Trocavaga = require('../models/Trocavaga');
 const messagesMiddleware = require('../middleware/messagesMiddleware');
-const ensureNotAuthenticated = require('../middleware/ensureNotAuthenticated');
+const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 
-// Controlador para lidar com a autenticação
-exports.getLoginPage = ensureNotAuthenticated;
-exports.getRegisterPage = ensureNotAuthenticated;
+//Login 
+exports.getLoginPage = (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect('/profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
+  }
 
-exports.postLogin = passport.authenticate('local', {
-  successRedirect: '/profile',
-  failureRedirect: '/auth/login?fail=true',
-  failureFlash: false
-});
+  const failMessage = req.query.fail === 'true' ? 'Credenciais inválidas. Por favor, tente novamente.' : null;
+  res.render('login', { failMessage });
+};
+
+
+exports.postLogin = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      const failMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+      return res.render('login', { failMessage });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.redirect('/profile');
+    });
+  })(req, res, next);
+};
 
 exports.logout = (req, res) => {
   req.logout();
   res.redirect('/index');
 };
+
+
+// Renderiza a página de registro
+exports.getRegisterPage = (req, res) => {
+  const successMessage = req.session.successMessage || null;
+  const errorMessage = req.session.errorMessage || null;
+
+  req.session.successMessage = null;
+  req.session.errorMessage = null;
+
+  res.render('register', { successMessage, errorMessage });
+};
+
+
 
 exports.postRegister = async (req, res) => {
   try {
@@ -27,7 +62,7 @@ exports.postRegister = async (req, res) => {
 
     if (userExists) {
       req.session.errorMessage = 'Usuário já existe.';
-      messagesMiddleware(req, res, () => {});
+      messagesMiddleware(req, res, () => { });
       return res.redirect('/auth/register');
     }
 
@@ -43,12 +78,12 @@ exports.postRegister = async (req, res) => {
     });
 
     req.session.successMessage = 'Usuário criado com sucesso! Faça login para continuar.';
-    messagesMiddleware(req, res, () => {});
+    messagesMiddleware(req, res, () => { });
     res.redirect('/auth/login');
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     req.session.errorMessage = 'Erro ao criar o usuário. Por favor, tente novamente.';
-    messagesMiddleware(req, res, () => {});
+    messagesMiddleware(req, res, () => { });
     res.redirect('/auth/register');
   }
 };
@@ -172,6 +207,24 @@ exports.viewProfile = async (req, res) => {
 };
 
 
+// Rota para exibir detalhes de uma trocavaga específica
+exports.viewTrocavagaById = async (req, res) => {
+  try {
+    const trocavaga = await Trocavaga.findByPk(req.params.id); // Considerando o uso do Sequelize
+
+    if (!trocavaga) {
+      return res.status(404).send('Trocavaga não encontrada');
+    }
+
+    // Renderizar a view com os detalhes da trocavaga
+    res.render('trocavagaView', { trocavaga });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao buscar trocavaga');
+  }
+};
+
+
 module.exports = {
   getLoginPage: exports.getLoginPage,
   postLogin: exports.postLogin,
@@ -182,8 +235,10 @@ module.exports = {
   postForgotPassword: exports.postForgotPassword,
   resetPasswordPage: exports.resetPasswordPage,
   postResetPassword: exports.postResetPassword,
+  test: exports.test,
   viewTrocavaga: exports.viewTrocavaga,
   renderAddTrocavaga: exports.renderAddTrocavaga,
   addTrocavaga: exports.addTrocavaga,
-  viewProfile: exports.viewProfile
+  viewProfile: exports.viewProfile,
+  viewTrocavagaById: exports.viewTrocavagaById
 };

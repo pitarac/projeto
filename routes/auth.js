@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+//const searchVaga = require ('../controllers/searchVaga')
 
 // Rota para o login
 router.get('/login', userController.getLoginPage);
@@ -22,6 +23,10 @@ router.get('/reset-password/:token', userController.resetPasswordPage);
 router.post('/reset-password/:token', userController.postResetPassword);
 
 // Rota para visualizar (não requer autenticação)
-router.get('/view/:id', userController.viewTrocavaga);
+router.get('/view/:id', userController.viewTrocavagaById);
+
+
+
+
 
 module.exports = router;

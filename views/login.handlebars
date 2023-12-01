@@ -6,7 +6,8 @@
 </head>
 
 <body>
-    <form action="/auth/login" method="POST">
+
+  <form action="/auth/login" method="POST">
         <label for="cpf">CPF:</label>
         <input type="text" id="cpf" name="cpf" required placeholder="Digite seu CPF">
 
@@ -16,8 +17,22 @@
         <button type="submit">Entrar</button>
     </form>
 
-    <!-- Mensagem de erro ou sucesso -->
-    <p id="resultado"></p>
+  {{#if failMessage}}
+        <div class="alert alert-danger" role="alert">
+            {{ failMessage }}
+        </div>
+    {{/if}}
+    <script>
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fail = urlParams.get('fail');
+
+            if (fail === 'true') {
+                const failMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+                document.getElementById('resultado').innerHTML = '<div class="alert alert-danger" role="alert">' + failMessage + '</div>';
+            }
+        }
+    </script>
 
     <!-- Botão para redefinir a senha -->
     <p>
@@ -28,22 +43,6 @@
     <p>
         Não tem uma conta? <a href="./register">Criar conta</a>
     </p>
-
-    <script>
-        window.onload = function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const error = urlParams.get('error');
-            const success = urlParams.get('success');
-
-            if (error) {
-                document.getElementById('resultado').innerText = error;
-                document.getElementById('resultado').style.color = 'red';
-            } else if (success) {
-                document.getElementById('resultado').innerText = success;
-                document.getElementById('resultado').style.color = 'green';
-            }
-        }
-    </script>
 </body>
 
 </html>
