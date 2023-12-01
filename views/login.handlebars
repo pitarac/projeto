@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Login</title>
+    <title>Entre no Troca Vagas</title>
 </head>
 
 <body>
@@ -13,16 +13,16 @@
 
         <label for="password">Senha:</label>
         <input type="password" id="password" name="password" placeholder="Digite a senha" required>
-
-        <button type="submit">Entrar</button>
-    </form>
-
-  {{#if failMessage}}
+           {{#if failMessage}}
         <div class="alert alert-danger" role="alert">
             {{ failMessage }}
         </div>
-    {{/if}}
-    <script>
+          {{/if}}
+        <button type="submit">Entrar</button>
+    </form>
+
+  
+   <!-- <script>
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const fail = urlParams.get('fail');
@@ -34,7 +34,7 @@
         }
     </script>
 
-    <!-- Botão para redefinir a senha -->
+     Botão para redefinir a senha -->
     <p>
         <a href="/forgot-password">Esqueceu a senha?</a>
     </p>

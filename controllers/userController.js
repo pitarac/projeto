@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
-
 const User = require('../models/User');
 const passport = require('passport');
 const Trocavaga = require('../models/Trocavaga');
@@ -10,7 +9,7 @@ const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 //Login 
 exports.getLoginPage = (req, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect('/profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
+    return res.redirect('auth/profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
   }
 
   const failMessage = req.query.fail === 'true' ? 'Credenciais inválidas. Por favor, tente novamente.' : null;
@@ -19,10 +18,14 @@ exports.getLoginPage = (req, res) => {
 
 
 exports.postLogin = (req, res, next) => {
+  const { cpf, password } = req.body;
+  console.log('Campos recebidos:', req.body);
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
     }
+    console.log('Info object:', info); 
+
     if (!user) {
       const failMessage = 'Credenciais inválidas. Por favor, tente novamente.';
       return res.render('login', { failMessage });
