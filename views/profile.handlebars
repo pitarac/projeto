@@ -1,15 +1,5 @@
 <div id="top-container" class="container-fluid">
-    <h1 id="main-title" class="text-center">Buscamos a melhor vaga para você!</h1>
-    <p id="main-subtitle" class="text-center">Seu portal de vagas da Rede Pública do Distrito federal, direcionado à vagas do Ensino Básico</p>
-    <!-- Formulário de busca -->
-    <form id="search-form" class="form-inline" action="/" method="GET">
-        <div class="form-group col-md-10">
-            <input type="text" class="form-control" id="trocavaga" name="trocavaga" placeholder="Digite a vaga que está buscando">
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary">Procurar</button>
-        </div>
-    </form>
+    <!-- ... (código existente) ... -->
 </div>
 
 <main>
@@ -23,6 +13,13 @@
                         <p>Nome: {{user.nome}}</p>
                         <p>Email: {{user.email}}</p>
                         <!-- Outras informações do usuário e vagas associadas -->
+                        <h2>Vagas do Usuário:</h2>
+                        <ul>
+                            {{#each trocavagas}}
+                                <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
+                                <!-- Adicione outras propriedades que deseja exibir -->
+                            {{/each}}
+                        </ul>
                     {{else}}
                         <p>Dados do usuário não encontrados</p>
                     {{/if}}
@@ -36,17 +33,27 @@
                 {{else}}
                     <h2 id="trocavaga-list-title">Veja as nossas vagas em destaque</h2>
                 {{/if}}
-                <ul id="trocavaga-list" class="list-group">
-                    {{#each trocavagas}}
-                        <li class="list-group-item {{#if dataValues.new_trocavaga }}new-trocavaga{{/if}}">
-                            <img src="/img/company.svg" alt="Company">
-                            <p><b>Série: </b>{{dataValues.serie_ano}}</p>
-                            <h5><b>Origem: </b>{{dataValues.escola_origem}} - {{dataValues.regiao_origem}}</h5>
-                            <p><b>Destino: </b>{{dataValues.escola_destino}} - {{dataValues.regiao_destino}}</p>
-                            <span class="new-trocavaga-label">Nova</span>
-                            <a class="btn btn-primary" href="/trocavagas/view/{{dataValues.id}}">Ver vaga</a>
-                        </li>
+
+                <!-- Exibindo todas as vagas -->
+                <h2>Todas as vagas disponíveis:</h2>
+                <ul>
+                    {{#each allTrocavagas}}
+                        <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
+                        <!-- Adicione outras propriedades que deseja exibir -->
                     {{/each}}
+                </ul>
+
+                <!-- Lista de vagas associadas ao usuário -->
+                <h2>Vagas Associadas ao Usuário:</h2>
+                <ul>
+                    {{#each user.trocavagas}}
+                        <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
+                        <!-- Adicione outras propriedades que deseja exibir -->
+                    {{/each}}
+                </ul>
+
+                <ul id="trocavaga-list" class="list-group">
+                    <!-- ... (código existente) ... -->
                 </ul>
             </div>
         </div>

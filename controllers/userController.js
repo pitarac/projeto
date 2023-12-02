@@ -9,7 +9,7 @@ const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 //Login 
 exports.getLoginPage = (req, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect('auth/profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
+    return res.redirect('./profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
   }
 
   const failMessage = req.query.fail === 'true' ? 'Credenciais inválidas. Por favor, tente novamente.' : null;
@@ -34,7 +34,7 @@ exports.postLogin = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      return res.redirect('/profile');
+      return res.redirect('./profile');
     });
   })(req, res, next);
 };
@@ -157,7 +157,23 @@ exports.addTrocavaga = async (req, res) => {
       new_trocavaga
     } = req.body;
 
-    if (!responsavel || !email || !telefone || !regiao_origem /*... outras verificações ...*/) {
+ // Adicionando console.log para verificar os dados recebidos do formulário
+ console.log('Dados recebidos do formulário:', req.body);
+
+    if (
+      !responsavel ||
+      !email ||
+      !telefone ||
+      !regiao_origem ||
+      !escola_origem ||
+      !grau_instrucao ||
+      !serie_ano ||
+      !turno_origem ||
+      !regiao_destino ||
+      !escola_destino ||
+      !turno_destino ||
+      !new_trocavaga
+    ){
       throw new Error('Por favor, preencha todos os campos obrigatórios.');
     }
 
@@ -194,18 +210,22 @@ exports.addTrocavaga = async (req, res) => {
 
 exports.viewProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const userWithVagas = await User.findOne({
-      where: { id: userId },
-      include: {
-        model: Trocavaga
-      }
-    });
+    if (req.isAuthenticated()) {
+      const user = await User.findByPk(req.user.id, {
+        include: Trocavaga, // Isso deve carregar as associações entre User e Trocavaga
+      });
 
-    res.render('perfil', { isLoggedIn: true, user: userWithVagas });
-  } catch (error) {
-    console.error('Erro ao buscar dados do usuário e suas vagas:', error);
-    res.status(500).send('Erro ao buscar dados do usuário');
+      if (user) {
+        res.render('profile', { user, isLoggedIn: true, search: req.query.trocavaga });
+      } else {
+        res.render('profile', { isLoggedIn: true, userDataNotFound: true });
+      }
+    } else {
+      res.render('profile', { isLoggedIn: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao carregar perfil do usuário');
   }
 };
 

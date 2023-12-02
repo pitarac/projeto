@@ -30,5 +30,10 @@ router.get('/view/:id', userController.viewTrocavagaById);
 router.get('/profile', ensureAuthenticated, userController.viewProfile);
 
 
+// Rota para renderizar a página de adição de troca de vaga (GET)
+router.get('/add', ensureAuthenticated, userController.renderAddTrocavaga);
+
+// Rota para lidar com a submissão do formulário de adição de troca de vaga (POST)
+router.post('/add', ensureAuthenticated, userController.addTrocavaga);
 
 module.exports = router;
