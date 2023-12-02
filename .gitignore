@@ -5,5 +5,5 @@
 
 /docker-compose.yml
 /db/data/database.sqlite
+*.sqlite
 
->>>>>>> 297e264cbbf00073d92763d27bc07267b79c4c3f
