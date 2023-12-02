@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil</title>
+    <!-- Adicione os links para os seus estilos CSS, se aplicável -->
+</head>
+<body>
+
+<div id="error-container" class="container">
+       
+        <p id="error-message" class="text-center">{{message}}</p>
+    
+    <div id="top-container" class="container-fluid">
+        <h1 id="main-title" class="text-center">Meu Perfil</h1>
+        <p id="main-subtitle" class="text-center">Informações pessoais</p>
+    </div>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 id="profile-title">Detalhes do Perfil</h2>
+                    <div id="profile-details">
+                        <p><strong>Nome:</strong> {{ user.nome }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <!-- Adicione outras informações do perfil conforme necessário -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Adicione os scripts necessários, se aplicável -->
+</body>
+</html>

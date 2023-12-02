@@ -1,58 +1,46 @@
 require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
+const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
-const session = require('express-session');
 const bodyParser = require('body-parser');
-const Sequelize = require('sequelize');
+const path = require('path');
 const db = require('./db/connection');
 const User = require('./models/User');
-const path = require('path');
-const mime = require('mime-types');
+const Trocavaga = require('./models/Trocavaga');
+const session = require('express-session');
 
-const router = express.Router();
-const fetchUserCPF = require('./middleware/fetchUserCPF');
+const authRoutes = require('./routes/auth');
 
-
+//const router = express.Router();
+//const fetchUserCPF = require('./middleware/fetchUserCPF');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Aplica o middleware globalmente para todas as rotas
-router.use(fetchUserCPF);
 
-require('./models/modelAssociations');
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-
-
+// Body parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Configuração da sessão
 app.use(session({
     secret: 'sua_chave_secreta',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {maxAge: 70 * 60 * 1000 },
+   // store: 
 }));
-
-// Middleware para mensagens
-app.use((req, res, next) => {
-    res.locals.successMessage = req.session.successMessage;
-    res.locals.errorMessage = req.session.errorMessage;
-    delete req.session.successMessage;
-    delete req.session.errorMessage;
-    next();
-  });
-
-
-
 
 // Inicialização do Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Use as rotas de autenticação
+app.use('/auth', authRoutes);
+
+
 
 // Configuração da estratégia local do Passport
 passport.use(new LocalStrategy({ usernameField: 'cpf' }, async (cpf, password, done) => {
@@ -89,8 +77,7 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-// Body parser
-app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // Configuração do Handlebars
 app.set('views', path.join(__dirname, 'views'));
@@ -100,22 +87,71 @@ app.set('view engine', 'handlebars');
 // Pasta estática
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Conexão com o banco de dados
-db.authenticate()
-    .then(() => console.log('Conectou ao banco com sucesso'))
-    .catch(err => console.log('Ocorreu um erro ao conectar', err));
+// Conexão com o banco de dados e sincronização dos modelos
+(async () => {
+    try {
+        await db.authenticate();
+        console.log('Conectou ao banco com sucesso');
 
-// Rotas
-require('./routes/auth')(app);
-const trocavagasRoutes = require('./routes/trocavagas');
-app.use('/trocavagas', trocavagasRoutes);
+        await User.sync();
+        await Trocavaga.sync();
 
-// Rota para a raiz do domínio
-app.get('/', (req, res) => {
-    res.render('index'); // Renderiza a view 'index' ao acessar a raiz do domínio
-});
+        // Configuração das associações
+        User.hasMany(Trocavaga);
+        Trocavaga.belongsTo(User);
 
-// Inicia o servidor
-app.listen(PORT, () => {
-    console.log(`O Express está rodando na porta ${PORT}`);
-});
+        console.log('Modelos sincronizados com o banco de dados.');
+
+        // Inicia o servidor após a sincronização
+        const server = app.listen(PORT, () => {
+            console.log(`O Express está rodando na porta ${PORT}`);
+        });
+
+        // Manipulador de eventos para lidar com erros no servidor
+        server.on('error', (err) => {
+            console.error('Erro no servidor:', err);
+            // Faça algo com o erro, se necessário
+        });
+    } catch (error) {
+        console.error('Erro ao conectar e sincronizar modelos:', error);
+    }
+})();
+
+
+
+app.get('/', async (req, res) => {
+    try {
+      let search = req.query.trocavaga;
+      let query = '%' + search + '%';
+  
+      let trocavagas;
+  
+      if (!search) {
+        trocavagas = await Trocavaga.findAll({
+          order: [['createdAt', 'DESC']]
+        });
+      } else {
+        trocavagas = await Trocavaga.findAll({
+          where: {
+            [Op.or]: [
+              { escola_origem: { [Op.like]: query } },
+              { escola_destino: { [Op.like]: query } },
+              { regiao_origem: { [Op.like]: query } },
+              { regiao_destino: { [Op.like]: query } }
+            ]
+          },
+          order: [['createdAt', 'DESC']]
+        });
+      }
+  
+      res.render('index', { trocavagas, search });
+    } catch (err) {
+      console.log(err);
+      res.status(500).send('Erro ao buscar trocavagas');
+    }
+  });
+
+
+
+
+module.exports = app;

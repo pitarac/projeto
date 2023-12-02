@@ -1,45 +1,44 @@
-const Sequelize = require('sequelize');
-const db = require('../db/connection');
-const Trocavaga = require('./Trocavaga');
+// User.js
 
-const User = db.define('user', {
-  nome: {
-    type: Sequelize.STRING,
-    allowNull: false
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../db/connection');
+
+class User extends Model {}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nome: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    cpf: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    dataNascimento: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   },
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
-  },
-  cpf: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true
-  },
-  dataNascimento: {
-    type: Sequelize.DATEONLY, // Armazena apenas a data, sem a hora
-    allowNull: false
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false
+  {
+    sequelize,
+    modelName: 'User'
   }
-  // Outros campos conforme necessário
-});
-
-
-
-// Sincronize o modelo com o banco de dados
-User.sync()
-  .then(() => {
-    console.log('Modelo User sincronizado com o banco de dados.');
-    // Definindo a associação após a sincronização
-    User.hasMany(Trocavaga, { foreignKey: 'userId' });
-  })
-  .catch(error => {
-    console.error('Erro ao sincronizar o modelo User:', error);
-  });
-
+);
 
 module.exports = User;
