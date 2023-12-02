@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
 const path = require('path');
 
 const dbPath = path.join(__dirname, 'data', 'database.sqlite');

@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const ensureAuthenticated = require('../middleware/ensureAuthenticated');
+const indexController = require('../controllers/userController');
+
+
 //const searchVaga = require ('../controllers/searchVaga')
+
+
 
 // Rota para o login
 router.get('/login', userController.getLoginPage);
@@ -35,5 +40,10 @@ router.get('/add', ensureAuthenticated, userController.renderAddTrocavaga);
 
 // Rota para lidar com a submissão do formulário de adição de troca de vaga (POST)
 router.post('/add', ensureAuthenticated, userController.addTrocavaga);
+
+
+// Rota autenticada para a página inicial após o login
+router.get('/index', ensureAuthenticated, userController.renderIndexPage);
+
 
 module.exports = router;
