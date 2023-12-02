@@ -4,6 +4,6 @@ function ensureAuthenticated(req, res, next) {
       return next();
   } else {
       res.locals.isLoggedIn = false; // Definindo isLoggedIn como false no contexto local
-      res.redirect('auth/login');
+      res.redirect('./login');
   }
 }

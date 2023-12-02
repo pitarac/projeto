@@ -147,7 +147,7 @@ app.get('/', async (req, res) => {
       res.render('index', { trocavagas, search });
     } catch (err) {
       console.log(err);
-      res.status(500).send('Erro ao buscar trocavagas');
+      res.status(500).send('Erro ao buscar troca vagas');
     }
   });
 
