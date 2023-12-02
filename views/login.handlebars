@@ -9,7 +9,9 @@
 
 <br><br><br>
 <p class="titulo-entrar">Entre ou crie uma conta para encontrar a vaga desejada.</p>
-
+{{#if errorMessage}}
+    <p class="error-message">{{ errorMessage }}</p>
+  {{/if}}
 
  <div class="form-entrar">
     <form action="/auth/login" method="POST">

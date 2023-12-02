@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bcrypt = require('bcryptjs');
@@ -10,7 +9,6 @@ const db = require('./db/connection');
 const User = require('./models/User');
 const Trocavaga = require('./models/Trocavaga');
 const session = require('express-session');
-
 const authRoutes = require('./routes/auth');
 
 //const router = express.Router();
@@ -81,9 +79,17 @@ passport.deserializeUser(async (id, done) => {
 
 // Configuração do Handlebars
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
+app.engine(
+  'handlebars',
+  exphbs.engine({
+    defaultLayout: 'main',
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true,
+    },
+  })
+);
 app.set('view engine', 'handlebars');
-
 // Pasta estática
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -119,37 +125,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.get('/', async (req, res) => {
-    try {
-      let search = req.query.trocavaga;
-      let query = '%' + search + '%';
-  
-      let trocavagas;
-  
-      if (!search) {
-        trocavagas = await Trocavaga.findAll({
-          order: [['createdAt', 'DESC']]
-        });
-      } else {
-        trocavagas = await Trocavaga.findAll({
-          where: {
-            [Op.or]: [
-              { escola_origem: { [Op.like]: query } },
-              { escola_destino: { [Op.like]: query } },
-              { regiao_origem: { [Op.like]: query } },
-              { regiao_destino: { [Op.like]: query } }
-            ]
-          },
-          order: [['createdAt', 'DESC']]
-        });
-      }
-  
-      res.render('index', { trocavagas, search });
-    } catch (err) {
-      console.log(err);
-      res.status(500).send('Erro ao buscar troca vagas');
-    }
-  });
+// Rota principal que não requer autenticação
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
 
 

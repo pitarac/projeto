@@ -4,7 +4,6 @@ const User = require('../models/User');
 const passport = require('passport');
 const Trocavaga = require('../models/Trocavaga');
 const messagesMiddleware = require('../middleware/messagesMiddleware');
-const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 
 //Login 
 exports.getLoginPage = (req, res) => {
@@ -17,26 +16,44 @@ exports.getLoginPage = (req, res) => {
 };
 
 
-exports.postLogin = (req, res, next) => {
-  const { cpf, password } = req.body;
-  console.log('Campos recebidos:', req.body);
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    console.log('Info object:', info); 
-
-    if (!user) {
-      const failMessage = 'Credenciais inválidas. Por favor, tente novamente.';
-      return res.render('login', { failMessage });
-    }
-    req.logIn(user, (err) => {
+exports.postLogin = async (req, res, next) => {
+  try {
+    const { cpf, password } = req.body;
+    console.log('Campos recebidos:', req.body);
+    passport.authenticate('local', async (err, user, info) => {
       if (err) {
         return next(err);
       }
-      return res.redirect('./profile');
-    });
-  })(req, res, next);
+      console.log('Info object:', info); 
+
+      if (!user) {
+        try {
+          // Verificar se o usuário existe no banco de dados
+          const foundUser = await User.findOne({ where: { cpf } });
+
+          if (!foundUser) {
+            // Se o usuário não existe, renderizar a view de login com a mensagem de erro
+            return res.render('login', { errorMessage: 'Usuário não encontrado. Por favor, verifique suas credenciais.' });
+          }
+
+          // Caso contrário, renderizar a view de login com a mensagem de credenciais inválidas
+          return res.render('login', { errorMessage: 'Credenciais inválidas. Por favor, tente novamente.' });
+        } catch (error) {
+          console.error('Erro ao buscar usuário:', error);
+          return res.status(500).send('Erro ao buscar usuário');
+        }
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect('./profile');
+      });
+    })(req, res, next);
+  } catch (error) {
+    console.error('Erro no login:', error);
+    return res.status(500).send('Erro no login');
+  }
 };
 
 exports.logout = (req, res) => {
@@ -132,14 +149,14 @@ exports.renderAddTrocavaga = (req, res) => {
       // Outras propriedades necessárias para a renderização
     });
   } else {
-    res.redirect('/login'); // Redirecionar para a página de login se o usuário não estiver autenticado
+    res.redirect('./login'); // Redirecionar para a página de login se o usuário não estiver autenticado
   }
 };
 
 exports.addTrocavaga = async (req, res) => {
   try {
     if (!req.isAuthenticated()) {
-      return res.redirect('/login'); // Redirecionar para a página de login se o usuário não estiver autenticado
+      return res.redirect('./login'); // Redirecionar para a página de login se o usuário não estiver autenticado
     }
 
     const {
@@ -210,19 +227,30 @@ exports.addTrocavaga = async (req, res) => {
 
 exports.viewProfile = async (req, res) => {
   try {
+    let userWithTrocavagas;
+
     if (req.isAuthenticated()) {
-      const user = await User.findByPk(req.user.id, {
-        include: Trocavaga, // Isso deve carregar as associações entre User e Trocavaga
+      const userId = req.user.id; // Obtém o ID do usuário autenticado
+
+      userWithTrocavagas = await User.findByPk(userId, {
+        include: Trocavaga, // Isso carrega as associações entre User e Trocavaga
       });
 
-      if (user) {
-        res.render('profile', { user, isLoggedIn: true, search: req.query.trocavaga });
-      } else {
-        res.render('profile', { isLoggedIn: true, userDataNotFound: true });
-      }
-    } else {
-      res.render('profile', { isLoggedIn: false });
+      console.log('Dados do usuário obtidos:', userWithTrocavagas); // Verifica os dados do usuário com Trocavagas
     }
+
+    // Consulta todas as vagas disponíveis
+    const allVacancies = await Trocavaga.findAll();
+
+    if (!userWithTrocavagas) {
+      return res.render('profile', { isLoggedIn: false });
+    }
+
+    if (!userWithTrocavagas) {
+      return res.render('profile', { isLoggedIn: true, userDataNotFound: true });
+    }
+
+    res.render('profile', { user: userWithTrocavagas, isLoggedIn: true, vacancies: allVacancies, search: req.query.trocavaga });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao carregar perfil do usuário');
@@ -248,6 +276,42 @@ exports.viewTrocavagaById = async (req, res) => {
 };
 
 
+// Redenriza a pagina Index com exibição de vagas 
+
+exports.renderIndexPage = async (req, res) => {
+  try {
+    let search = req.query.trocavaga;
+    let query = '%' + search + '%';
+
+    let trocavagas;
+
+    if (!search) {
+      trocavagas = await Trocavaga.findAll({
+        order: [['createdAt', 'DESC']]
+      });
+    } else {
+      trocavagas = await Trocavaga.findAll({
+        where: {
+          [Op.or]: [
+            { escola_origem: { [Op.like]: query } },
+            { escola_destino: { [Op.like]: query } },
+            { regiao_origem: { [Op.like]: query } },
+            { regiao_destino: { [Op.like]: query } }
+          ]
+        },
+        order: [['createdAt', 'DESC']]
+      });
+    }
+
+    res.render('index', { trocavagas, search });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Erro ao buscar troca vagas');
+  }
+};
+
+
+
 module.exports = {
   getLoginPage: exports.getLoginPage,
   postLogin: exports.postLogin,
@@ -263,5 +327,6 @@ module.exports = {
   renderAddTrocavaga: exports.renderAddTrocavaga,
   addTrocavaga: exports.addTrocavaga,
   viewProfile: exports.viewProfile,
-  viewTrocavagaById: exports.viewTrocavagaById
+  viewTrocavagaById: exports.viewTrocavagaById,
+  renderIndexPage: exports.renderIndexPage
 };

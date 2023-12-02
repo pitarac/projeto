@@ -3,21 +3,46 @@
 </div>
 
 <main>
+    <script>
+        console.log("Valor de 'user': ", JSON.stringify(user));
+        console.log("Valor de 'isLoggedIn': ", true);
+        console.log("Valor de 'userDataNotFound': ", null);
+    </script>
+
     <div id="trocavagas-container" class="container">
         <div class="row">
             <div class="col-md-12">
                 {{#if isLoggedIn}}
-                    <!-- Perfil do usuário -->
                     <h1 id="user-profile-title">Perfil do Usuário</h1>
                     {{#if user}}
                         <p>Nome: {{user.nome}}</p>
                         <p>Email: {{user.email}}</p>
-                        <!-- Outras informações do usuário e vagas associadas -->
                         <h2>Vagas do Usuário:</h2>
                         <ul>
-                            {{#each trocavagas}}
-                                <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
-                                <!-- Adicione outras propriedades que deseja exibir -->
+                            {{#each user.Trocavagas}}
+                                <li class="list-group-item {{#if this.dataValues.new_trocavaga }}new-trocavaga{{/if}}">
+                                    <img src="/img/company.svg" alt="Company">
+                                    <p><b>Série: </b>{{this.serie_ano}}</p>
+                                    <h5><b>Origem: </b>{{this.escola_origem}} - {{this.regiao_origem}}</h5>
+                                    <p><b>Destino: </b>{{this.escola_destino}} - {{this.regiao_destino}}</p>
+                                    <span class="new-trocavaga-label" href="/auth/view">Nova</span>
+                                    <a class="btn btn-primary" href="/auth/view/{{this.dataValues.id}}">Ver vaga</a>
+                                </li>
+                                <!-- Adicione outras propriedades conforme necessário -->
+                            {{/each}}
+                        </ul>
+
+                        <h2>Todas as vagas disponíveis:</h2>
+                        <ul>
+                            {{#each vacancies}}
+                                <li class="list-group-item">
+                                    <img src="/img/company.svg" alt="Company">
+                                    <p><b>Série: </b>{{this.serie_ano}}</p>
+                                    <h5><b>Origem: </b>{{this.escola_origem}} - {{this.regiao_origem}}</h5>
+                                    <p><b>Destino: </b>{{this.escola_destino}} - {{this.regiao_destino}}</p>
+                                    <a class="btn btn-primary" href="/auth/view/{{this.id}}">Ver vaga</a>
+                                </li>
+                                <!-- Adicione outras propriedades conforme necessário -->
                             {{/each}}
                         </ul>
                     {{else}}
@@ -26,35 +51,6 @@
                 {{else}}
                     <p>Você precisa estar logado para acessar esta página</p>
                 {{/if}}
-
-                <!-- Lista de vagas -->
-                {{#if search}}
-                    <h2 id="trocavaga-list-title">Buscando vagas que contem: {{search}}</h2>
-                {{else}}
-                    <h2 id="trocavaga-list-title">Veja as nossas vagas em destaque</h2>
-                {{/if}}
-
-                <!-- Exibindo todas as vagas -->
-                <h2>Todas as vagas disponíveis:</h2>
-                <ul>
-                    {{#each allTrocavagas}}
-                        <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
-                        <!-- Adicione outras propriedades que deseja exibir -->
-                    {{/each}}
-                </ul>
-
-                <!-- Lista de vagas associadas ao usuário -->
-                <h2>Vagas Associadas ao Usuário:</h2>
-                <ul>
-                    {{#each user.trocavagas}}
-                        <li>{{this.serie_ano}} - {{this.escola_origem}} - {{this.regiao_origem}} - {{this.escola_destino}} - {{this.regiao_destino}}</li>
-                        <!-- Adicione outras propriedades que deseja exibir -->
-                    {{/each}}
-                </ul>
-
-                <ul id="trocavaga-list" class="list-group">
-                    <!-- ... (código existente) ... -->
-                </ul>
             </div>
         </div>
     </div>
