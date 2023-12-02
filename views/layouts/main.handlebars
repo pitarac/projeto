@@ -9,17 +9,22 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/styles.css">
+
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&family=Roboto:wght@300&display=swap');
+</style>
 </head>
+
 
 <body>
   <header>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="/">
         <div id="img-navbar" class="col-md-12">
-          <img src="/img/TrocaVaga.jpg" alt="TrocaVaga">
+          <img src="/img/logonova.png" alt="TrocaVaga">
         </div>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -29,20 +34,20 @@
             {{cpf}}
             <!-- Botão/link de perfil -->
             <a class="nav-link" href="/perfil">Perfil</a>
-
+           
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/">Vagas Disponíveis</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-primary" href="./add">Cadastrar Vaga</a>
-          <li class="nav-item">
+            <a class="nav-link btn btn-primary" href="Trocavaga/add">Cadastrar Vaga</a>
+          <li class="nav-link">
             <!-- Botão/link de login -->
             {{#if isLoggedIn}}
             <!-- Botão/link de logout -->
             <a href="auth/logout">SAIR</a>
             {{else}}
-
+            
             <a href="/auth/login">Entrar</a>
             {{/if}}
           </li>
@@ -50,7 +55,9 @@
       </div>
     </nav>
   </header>
+  
   {{{ body }}}
+  
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
     crossorigin="anonymous"></script>
@@ -62,4 +69,13 @@
     crossorigin="anonymous"></script>
 </body>
 
+
+
+<footer>
+
+		<p align="center"> Desenvolvido por <a href="https://www.linkedin.com/in/%C3%A1dison-souza-gualberto-4930a91b5/?trk=contact-info" target="_blank">Ádison Gualberto</a> & <a href="https://www.linkedin.com/in/julio-cezar-dias-2623b2225/" target="_blank">Júlio Dias </a>2023</p>
+
+	</footer>
+
 </html>
+

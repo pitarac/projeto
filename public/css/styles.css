@@ -1,7 +1,8 @@
 * {
   box-sizing: border-box;
-  font-family: Helvetica, sans-serif;
+  font-family: Poppins, sans-serif;
 }
+
 
 body {
   padding-top: 80px; /* Adicionado para evitar a sobreposição da navbar */
@@ -58,7 +59,7 @@ body {
   padding: 110px;
   background-color: #f7f9fc;
   border-bottom: 4px solid #013068;
-  margin-bottom: 30px;
+  margin-bottom: 2px;
   background-image: url('../img/banner2.jpg');
   background-position: center;
   background-size: cover;
@@ -67,7 +68,7 @@ body {
 
 #main-title {
   padding: 30px 0;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 #main-subtitle {
@@ -339,4 +340,56 @@ body {
   #form-box button {
     width: 100%;
   }
+}
+
+/* Tela de Login - entrar*/
+
+.form-entrar {
+  
+  border: 4px solid #ccc;  
+  padding: 30px;
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center
+}
+.form-entrar button {
+  background-color: #4169e1;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+.form-entrar button:hover {
+  background-color: #1e90ff; /* Cor diferente quando o mouse está sobre o botão */
+}
+.titulo-entrar{
+  color: #73767f; /* Cor azul */
+  font-size: 20px; /* Tamanho 20 pixels */
+  text-align: center; /* Centraliza o texto */
+  font-weight: bold;
+  
+}
+
+/*rodape*/
+
+footer {
+	background-color: #f8f9fa;
+	padding: 5px;
+  margin-top: 150px;
+	
+}
+
+footer p{
+	text-align: center;
+
+}
+
+footer a: hover{
+	color: write;
 }

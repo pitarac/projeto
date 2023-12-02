@@ -19,6 +19,31 @@
     </div>
     {{/if}}
 
+<script>
+  // Exibição das mensagens usando JavaScript
+  window.onload = function () {
+    const successMessage = "{{successMessage}}";
+    const errorMessage = "{{errorMessage}}";
+
+    if (successMessage) {
+      showAlert(successMessage, 'green');
+    } else if (errorMessage) {
+      showAlert(errorMessage, 'red');
+    }
+  };
+
+  // Função para mostrar a mensagem em um alerta
+  function showAlert(message, color) {
+    const alertDiv = document.createElement('div');
+    alertDiv.classList.add('alert');
+    alertDiv.classList.add(`alert-${color}`);
+    alertDiv.textContent = message;
+
+    // Adiciona o alerta à página
+    document.body.appendChild(alertDiv);
+  }
+</script>
+
     <form action="/auth/register" method="POST" id="form-cpf">
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required autocomplete="name">
@@ -40,28 +65,6 @@
         <button type="submit">Registrar</button>
     </form>
 
-
-
-
-
-
-
-    <!-- <script src="./js/valida-cpf.js"></script>
-   <script>
-        window.onload = function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const error = urlParams.get('error');
-            const success = urlParams.get('success');
-
-            if (error) {
-                document.getElementById('resultado').innerText = error;
-                document.getElementById('resultado').style.color = 'red';
-            } else if (success) {
-                document.getElementById('resultado').innerText = success;
-                document.getElementById('resultado').style.color = 'green';
-            }
-        }
-    </script> -->
 </body>
 
 </html>
