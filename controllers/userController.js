@@ -522,5 +522,6 @@ module.exports = {
   addTrocavaga: exports.addTrocavaga,
   viewProfile: exports.viewProfile,
   viewTrocavagaById: exports.viewTrocavagaById,
-  renderIndexPage: exports.renderIndexPage
+  renderIndexPage: exports.renderIndexPage,
+  deleteTrocavaga: exports.deleteTrocavaga
 };
