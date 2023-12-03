@@ -2,49 +2,17 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Registrar</title>
+  <meta charset="UTF-8">
+  <title>Registrar</title>
+  <!-- Adicione a referência ao CDN do input-mask -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.0.8/imask.min.js"></script>
 </head>
 
 <body>
-    {{#if successMessage}}
-    <div class="alert alert-success" role="alert">
-        {{successMessage}}
-    </div>
-    {{/if}}
+  <!-- Seu código HTML existente -->
 
-    {{#if errorMessage}}
-    <div class="alert alert-danger" role="alert">
-        {{errorMessage}}
-    </div>
-    {{/if}}
-
-<script>
-  // Exibição das mensagens usando JavaScript
-  window.onload = function () {
-    const successMessage = "{{successMessage}}";
-    const errorMessage = "{{errorMessage}}";
-
-    if (successMessage) {
-      showAlert(successMessage, 'green');
-    } else if (errorMessage) {
-      showAlert(errorMessage, 'red');
-    }
-  };
-
-  // Função para mostrar a mensagem em um alerta
-  function showAlert(message, color) {
-    const alertDiv = document.createElement('div');
-    alertDiv.classList.add('alert');
-    alertDiv.classList.add(`alert-${color}`);
-    alertDiv.textContent = message;
-
-    // Adiciona o alerta à página
-    document.body.appendChild(alertDiv);
-  }
-</script>
-
-    <form action="/auth/register" method="POST" id="form-cpf">
+  
+    <form action="/auth/register" method="POST" id="form-cpf" class="form-entrar">
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required autocomplete="name">
 
@@ -52,8 +20,8 @@
         <input type="email" id="email" name="email" required autocomplete="email">
 
         <label for="cpf">CPF (será usado como usuário):</label>
-        <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required onchange="verificaCPF()"
-            autocomplete="cpf">
+        <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required autocomplete="off" maxlength="14">
+        <p id="cpf-validation-msg" style="color: red;"></p> <!-- Mensagem de validação do CPF -->
 
         <label for="dataNascimento">Data de Nascimento:</label>
         <input type="date" id="dataNascimento" name="dataNascimento" required autocomplete="bday">
@@ -61,10 +29,10 @@
         <label for="password">Senha:</label>
         <input type="password" id="password" name="password" required autocomplete="new-password">
 
-        <p id="resultado"></p>
         <button type="submit">Registrar</button>
     </form>
 
+  
 </body>
 
 </html>

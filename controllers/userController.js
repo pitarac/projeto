@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { cpf } = require('cpf-cnpj-validator');
 const express = require('express');
 const User = require('../models/User');
 const passport = require('passport');
@@ -77,12 +78,20 @@ exports.getRegisterPage = (req, res) => {
 
 exports.postRegister = async (req, res) => {
   try {
-    const { nome, email, cpf, dataNascimento, password } = req.body;
-    const userExists = await User.findOne({ where: { cpf } });
+    const { nome, email, cpf: cpfInput, dataNascimento, password } = req.body;
+
+    // Verifica se o CPF inserido é válido
+    if (!cpf.isValid(cpfInput)) {
+      req.session.errorMessage = 'CPF inválido. Por favor, insira um CPF válido.';
+      messagesMiddleware(req, res, () => {});
+      return res.redirect('/auth/register');
+    }
+
+    const userExists = await User.findOne({ where: { cpf: cpfInput } });
 
     if (userExists) {
       req.session.errorMessage = 'Usuário já existe.';
-      messagesMiddleware(req, res, () => { });
+      messagesMiddleware(req, res, () => {});
       return res.redirect('/auth/register');
     }
 
@@ -92,18 +101,18 @@ exports.postRegister = async (req, res) => {
     await User.create({
       nome,
       email,
-      cpf,
+      cpf: cpfInput,
       dataNascimento,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     req.session.successMessage = 'Usuário criado com sucesso! Faça login para continuar.';
-    messagesMiddleware(req, res, () => { });
+    messagesMiddleware(req, res, () => {});
     res.redirect('/auth/login');
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     req.session.errorMessage = 'Erro ao criar o usuário. Por favor, tente novamente.';
-    messagesMiddleware(req, res, () => { });
+    messagesMiddleware(req, res, () => {});
     res.redirect('/auth/register');
   }
 };
