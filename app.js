@@ -34,7 +34,7 @@ app.use(session({
     cookie: {maxAge: 70 * 60 * 1000 },
    // store: 
 }));
-
+app.use(methodOverride('_method'));
 app.use((req, res, next) => {
     console.log('Estado da sessão:', req.session);
     next();
@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(methodOverride('_method'));
+
 
 app.use(messagesMiddleware);
 
