@@ -321,6 +321,8 @@ exports.viewTrocavagaById = async (req, res) => {
 // Redenriza a pagina Index com exibição de vagas 
 
 exports.renderIndexPage = async (req, res) => {
+  const isLoggedIn = req.isAuthenticated();
+  
   try {
     let search = req.query.trocavaga;
     let query = '%' + search + '%';
@@ -345,7 +347,9 @@ exports.renderIndexPage = async (req, res) => {
       });
     }
 
-    res.render('index', { trocavagas, search });
+    // Corrigido: Passando isLoggedIn junto com trocavagas e search
+    res.render('index', { trocavagas, search, isLoggedIn });
+
   } catch (err) {
     console.error('Erro ao renderizar a página de índice:', err);
     res.status(500).send('Erro ao buscar trocavagas');
