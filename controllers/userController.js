@@ -144,7 +144,7 @@ exports.postRegister = async (req, res) => {
 
     messagesMiddleware(req, res, () => {});
     console.log('Mensagem de sucesso:', req.session.successMessage);
-    res.redirect('/auth/login');
+    res.redirect('/auth/index');
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     req.session.errorMessage = 'Erro ao criar o usuário. Por favor, tente novamente.';
