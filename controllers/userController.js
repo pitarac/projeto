@@ -262,7 +262,7 @@ exports.addTrocavaga = async (req, res) => {
     });
   } catch (error) {
     console.error('Erro ao adicionar a vaga:', error);
-    res.render('profile', {
+    res.render('add', {
       isLoggedIn: req.isAuthenticated(),
       error: 'Erro ao adicionar a vaga. Por favor, preencha todos os campos corretamente.'
     });
