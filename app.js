@@ -11,6 +11,9 @@ const Trocavaga = require('./models/Trocavaga');
 const session = require('express-session');
 const authRoutes = require('./routes/auth');
 const messagesMiddleware = require('./middleware/messagesMiddleware');
+const methodOverride = require('method-override');
+
+
 
 //const router = express.Router();
 //const fetchUserCPF = require('./middleware/fetchUserCPF');
@@ -41,6 +44,7 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(methodOverride('_method'));
 
 app.use(messagesMiddleware);
 
