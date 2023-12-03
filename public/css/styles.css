@@ -393,3 +393,13 @@ footer p{
 footer a: hover{
 	color: write;
 }
+
+.success-message {
+  color: green;
+  // Outros estilos aqui...
+}
+
+.error-message {
+  color: red;
+  // Outros estilos aqui...
+}

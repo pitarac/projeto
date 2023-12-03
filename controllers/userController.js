@@ -8,12 +8,26 @@ const messagesMiddleware = require('../middleware/messagesMiddleware');
 
 //Login 
 exports.getLoginPage = (req, res) => {
+  console.log('Mensagem de sucesso ao entrar na página de login:', req.session.successMessage);
+
   if (req.isAuthenticated()) {
     return res.redirect('./profile'); // Se o usuário já estiver autenticado, redireciona para a página de perfil
   }
 
+  // Mensagem de falha vinda dos parâmetros da query
   const failMessage = req.query.fail === 'true' ? 'Credenciais inválidas. Por favor, tente novamente.' : null;
-  res.render('login', { failMessage });
+
+  // Mensagem de sucesso vinda da sessão
+  const successMessage = req.session.successMessage;
+
+  // Renderizando a página de login com as mensagens
+  res.render('login', { 
+    failMessage, 
+    successMessage: req.session.successMessage 
+  });
+
+  // Limpando a mensagem de sucesso da sessão após ser usada
+  delete req.session.successMessage;
 };
 
 
@@ -58,8 +72,25 @@ exports.postLogin = async (req, res, next) => {
 };
 
 exports.logout = (req, res) => {
-  req.logout();
-  res.redirect('/index');
+  req.logout(function(err) {
+    if (err) { 
+        // Tratar o erro aqui
+        console.error('Erro ao encerrar a sessão:', err);
+        return res.redirect('/alguma-pagina-de-erro');
+    }
+    // Logout foi bem-sucedido
+    req.session.destroy((err) => {
+        if (err) {
+            // Tratar o erro aqui
+            console.error('Erro ao destruir a sessão:', err);
+            return res.redirect('/alguma-pagina-de-erro');
+        }
+        // Limpar o cookie de sessão, se estiver usando
+        res.clearCookie('connect.sid'); // Substitua 'connect.sid' pelo nome do seu cookie de sessão, se for diferente
+        // Redirecionar para a página de login ou home
+        res.redirect('/');
+    });
+});
 };
 
 
@@ -107,7 +138,9 @@ exports.postRegister = async (req, res) => {
     });
 
     req.session.successMessage = 'Usuário criado com sucesso! Faça login para continuar.';
+
     messagesMiddleware(req, res, () => {});
+    console.log('Mensagem de sucesso:', req.session.successMessage);
     res.redirect('/auth/login');
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
@@ -314,11 +347,10 @@ exports.renderIndexPage = async (req, res) => {
 
     res.render('index', { trocavagas, search });
   } catch (err) {
-    console.log(err);
-    res.status(500).send('Erro ao buscar troca vagas');
+    console.error('Erro ao renderizar a página de índice:', err);
+    res.status(500).send('Erro ao buscar trocavagas');
   }
 };
-
 
 
 module.exports = {

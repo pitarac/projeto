@@ -13,6 +13,10 @@
     <p class="error-message">{{ errorMessage }}</p>
   {{/if}}
 
+  {{#if successMessage}}
+    <p class="success-message">{{ successMessage }}</p>
+{{/if}}
+
  <div class="form-entrar">
     <form action="/auth/login" method="POST">
         <label for="cpf">CPF:  </label>
