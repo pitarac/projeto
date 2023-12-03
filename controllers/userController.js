@@ -256,7 +256,7 @@ exports.addTrocavaga = async (req, res) => {
       UserId: userId
     });
 
-    res.render('/auth/profile', {
+    res.render('profile', {
       isLoggedIn: req.isAuthenticated(),
       success: 'Vaga adicionada com sucesso!'
     });
