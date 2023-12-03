@@ -36,14 +36,26 @@
                         <h2>Todas as vagas disponíveis:</h2>
                         <ul>
                             {{#each vacancies}}
-                                <li class="list-group-item">
-                                    <img src="/img/company.svg" alt="Company">
-                                    <p><b>Série: </b>{{this.serie_ano}}</p>
-                                    <h5><b>Origem: </b>{{this.escola_origem}} - {{this.regiao_origem}}</h5>
-                                    <p><b>Destino: </b>{{this.escola_destino}} - {{this.regiao_destino}}</p>
-                                    <a class="btn btn-primary" href="/auth/view/{{this.id}}">Ver vaga</a>
-                                </li>
-                                <!-- Adicione outras propriedades conforme necessário -->
+                               <ul>
+  {{#each user.Trocavagas}}
+    <li class="list-group-item {{#if this.dataValues.new_trocavaga }}new-trocavaga{{/if}}">
+      <img src="/img/company.svg" alt="Company">
+      <p><b>Série: </b>{{this.serie_ano}}</p>
+      <h5><b>Origem: </b>{{this.escola_origem}} - {{this.regiao_origem}}</h5>
+      <p><b>Destino: </b>{{this.escola_destino}} - {{this.regiao_destino}}</p>
+      <span class="new-trocavaga-label" href="/auth/view">Nova</span>
+      <a class="btn btn-primary" href="/auth/view/{{this.dataValues.id}}">Ver vaga</a>
+      
+      <!-- Botão de Deleção -->
+      <form action="/trocavaga/delete/{{this.dataValues.id}}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class="btn btn-danger">Deletar Vaga</button>
+      </form>
+    </li>
+    <!-- Adicione outras propriedades conforme necessário -->
+  {{/each}}
+</ul>
+
                             {{/each}}
                         </ul>
                     {{else}}

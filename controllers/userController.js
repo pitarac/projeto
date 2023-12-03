@@ -388,6 +388,33 @@ exports.addTrocavaga = async (req, res) => {
   }
 };
 
+exports.deleteTrocavaga = async (req, res) => {
+  try {
+    if (!req.isAuthenticated()) {
+      return res.redirect('./login'); // Redirecionar para a página de login se o usuário não estiver autenticado
+    }
+
+    const { id } = req.params; // Aqui você pega o ID da trocavaga a ser deletada da URL
+
+    // Verificar se a trocavaga existe
+    const trocavaga = await Trocavaga.findByPk(id);
+    if (!trocavaga) {
+      return res.status(404).send('Trocavaga não encontrada.');
+    }
+
+    // Verificar se o usuário logado tem permissão para deletar a trocavaga
+    if (trocavaga.UserId !== req.user.id) {
+      return res.status(403).send('Você não tem permissão para deletar essa trocavaga.');
+    }
+
+    await Trocavaga.destroy({ where: { id } }); // Deletar a trocavaga
+
+    res.send('Trocavaga deletada com sucesso!');
+  } catch (error) {
+    console.error('Erro ao deletar a trocavaga:', error);
+    res.status(500).send('Erro ao deletar a trocavaga.');
+  }
+};
 
 exports.viewProfile = async (req, res) => {
   try {

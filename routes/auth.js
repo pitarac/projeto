@@ -40,6 +40,9 @@ router.get('/add', ensureAuthenticated, userController.renderAddTrocavaga);
 // Rota para lidar com a submissão do formulário de adição de troca de vaga (POST)
 router.post('/add', ensureAuthenticated, userController.addTrocavaga);
 
+router.delete('/trocavaga/:id', ensureAuthenticated, userController.deleteTrocavaga);
+
+
 
 // Rota autenticada para a página inicial após o login
 router.get('/index', ensureAuthenticated, userController.renderIndexPage);
