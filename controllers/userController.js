@@ -5,6 +5,9 @@ const User = require('../models/User');
 const passport = require('passport');
 const Trocavaga = require('../models/Trocavaga');
 const messagesMiddleware = require('../middleware/messagesMiddleware');
+const { Op } = require('sequelize');
+
+
 
 //Login 
 exports.getLoginPage = (req, res) => {
