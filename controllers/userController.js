@@ -324,8 +324,7 @@ exports.addTrocavaga = async (req, res) => {
     }
 
     const {
-      responsavel,
-      email,
+      
       telefone,
       regiao_origem,
       escola_origem,
@@ -342,8 +341,7 @@ exports.addTrocavaga = async (req, res) => {
  console.log('Dados recebidos do formulário:', req.body);
 
     if (
-      !responsavel ||
-      !email ||
+      
       !telefone ||
       !regiao_origem ||
       !escola_origem ||
