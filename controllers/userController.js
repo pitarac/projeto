@@ -313,7 +313,7 @@ exports.viewTrocavagaById = async (req, res) => {
     }
 
     // Renderizar a view com os detalhes da trocavaga
-    res.render('trocavagaView', { trocavaga });
+    res.render('view', { trocavaga });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao buscar trocavaga');
