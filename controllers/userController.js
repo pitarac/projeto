@@ -409,7 +409,7 @@ exports.deleteTrocavaga = async (req, res) => {
 
     await Trocavaga.destroy({ where: { id } }); // Deletar a trocavaga
 
-    res.send('Trocavaga deletada com sucesso!');
+    res.send('Vaga deletada com sucesso!');
   } catch (error) {
     console.error('Erro ao deletar a trocavaga:', error);
     res.status(500).send('Erro ao deletar a trocavaga.');

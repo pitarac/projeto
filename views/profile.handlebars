@@ -32,10 +32,10 @@
       <a class="btn btn-primary" href="/auth/view/{{this.id}}">Ver vaga</a>
       
       <!-- Botão de Deleção -->
-      <form action="/trocavaga/delete/{{this.id}}" method="post">
-        <input type="hidden" name="_method" value="DELETE">
-        <button type="submit" class="btn btn-danger">Deletar Vaga</button>
-      </form>
+      <form action="/auth/delete/{{this.id}}" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit" class="btn btn-danger">Deletar Vaga</button>
+</form>
     </li>
     <!-- Adicione outras propriedades conforme necessário -->
   {{/each}}
