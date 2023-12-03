@@ -375,7 +375,7 @@ exports.addTrocavaga = async (req, res) => {
       UserId: userId
     });
 
-    res.render('profile', {
+    res.render('index', {
       isLoggedIn: req.isAuthenticated(),
       success: 'Vaga adicionada com sucesso!'
     });
@@ -410,6 +410,7 @@ exports.deleteTrocavaga = async (req, res) => {
     await Trocavaga.destroy({ where: { id } }); // Deletar a trocavaga
 
     res.send('Vaga deletada com sucesso!');
+    res.redirect('profile')
   } catch (error) {
     console.error('Erro ao deletar a trocavaga:', error);
     res.status(500).send('Erro ao deletar a trocavaga.');
