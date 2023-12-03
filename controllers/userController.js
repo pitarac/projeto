@@ -261,13 +261,12 @@ exports.viewProfile = async (req, res) => {
 // Rota para exibir detalhes de uma trocavaga específica
 exports.viewTrocavagaById = async (req, res) => {
   try {
-    const trocavaga = await Trocavaga.findByPk(req.params.id); // Considerando o uso do Sequelize
+    const trocavaga = await Trocavaga.findByPk(req.params.id);
 
     if (!trocavaga) {
       return res.status(404).send('Trocavaga não encontrada');
     }
 
-    // Renderizar a view com os detalhes da trocavaga
     res.render('trocavagaView', { trocavaga });
   } catch (err) {
     console.error(err);
