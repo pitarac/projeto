@@ -374,10 +374,8 @@ exports.addTrocavaga = async (req, res) => {
       UserId: userId
     });
 
-    res.redirect('/auth/profile', {
-      isLoggedIn: req.isAuthenticated(),
-      success: 'Vaga adicionada com sucesso!'
-    });
+    req.session.successMessage = 'Vaga adicionada com sucesso!';
+    res.redirect('/auth/profile');
   } catch (error) {
     console.error('Erro ao adicionar a vaga:', error);
     res.render('add', {
