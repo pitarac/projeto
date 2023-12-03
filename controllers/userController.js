@@ -144,7 +144,7 @@ exports.postRegister = async (req, res) => {
 
     messagesMiddleware(req, res, () => {});
     console.log('Mensagem de sucesso:', req.session.successMessage);
-    res.redirect('/auth/index');
+    res.redirect('/auth/login');
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
     req.session.errorMessage = 'Erro ao criar o usuário. Por favor, tente novamente.';
@@ -256,7 +256,7 @@ exports.addTrocavaga = async (req, res) => {
       UserId: userId
     });
 
-    res.render('add', {
+    res.render('/auth/profile', {
       isLoggedIn: req.isAuthenticated(),
       success: 'Vaga adicionada com sucesso!'
     });
