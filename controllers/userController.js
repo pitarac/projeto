@@ -324,7 +324,8 @@ exports.addTrocavaga = async (req, res) => {
     }
 
     const {
-      
+      responsavel,
+      email,
       telefone,
       regiao_origem,
       escola_origem,
