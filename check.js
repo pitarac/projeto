@@ -13,3 +13,4 @@ async function consultarTrocavagas() {
 }
 
 consultarTrocavagas();
+

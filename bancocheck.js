@@ -29,3 +29,4 @@ async function listTables() {
 
 // Chamando a função para listar as tabelas
 listTables();
+   

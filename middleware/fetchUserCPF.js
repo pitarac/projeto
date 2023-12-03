@@ -24,3 +24,4 @@ const fetchUserCPF = async (req, res, next) => {
 };
 
 module.exports = fetchUserCPF;
+ 
