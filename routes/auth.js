@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const ensureAuthenticated = require('../middleware/ensureAuthenticated');
-const indexController = require('../controllers/userController');
 
 
 //const searchVaga = require ('../controllers/searchVaga')
@@ -29,7 +28,7 @@ router.get('/reset-password/:token', userController.resetPasswordPage);
 router.post('/reset-password/:token', userController.postResetPassword);
 
 // Rota para visualizar (não requer autenticação)
-router.get('/view/:id', userController.viewTrocavagaById);
+router.get('/view/:id', ensureAuthenticated, userController.viewTrocavagaById);
 
 // Rota para visualizar o perfil do usuário
 router.get('/profile', ensureAuthenticated, userController.viewProfile);

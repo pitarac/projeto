@@ -13,6 +13,10 @@
     <p class="error-message">{{ errorMessage }}</p>
   {{/if}}
 
+  {{#if successMessage}}
+    <p class="success-message">{{ successMessage }}</p>
+{{/if}}
+
  <div class="form-entrar">
     <form action="/auth/login" method="POST">
         <label for="cpf">CPF:  </label>
@@ -40,7 +44,7 @@
 
      Botão para redefinir a senha -->
     <p>
-        <a href="/forgot-password">Esqueceu a senha?</a>
+        <a href="/auth/forgot-password">Esqueceu a senha?</a>
     </p>
 
     <!-- Botão para criar um novo usuário -->

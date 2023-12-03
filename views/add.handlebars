@@ -7,9 +7,24 @@
     </div>
     <div id="form-box" class="col-md-12">
       <h2>Preencha os dados do Responsável:</h2>
+
+      <!-- Mensagem de Sucesso -->
+{{#if success}}
+    <div class="alert alert-success" role="alert">
+        {{success}}
+    </div>
+{{/if}}
+
+<!-- Mensagem de Erro -->
+{{#if error}}
+    <div class="alert alert-danger" role="alert">
+        {{error}}
+    </div>
+{{/if}}
      <!-- Verifique se há uma mensagem de sucesso e exiba-a na página -->
 {{#if success}}
     <p>{{success}}</p>
+    <button class="btn btn-primary">Ver Vagas</button>
 {{/if}}
      
       <!-- Verifique se há um erro e exiba-o na página -->

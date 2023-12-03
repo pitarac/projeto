@@ -10,6 +10,7 @@ const User = require('./models/User');
 const Trocavaga = require('./models/Trocavaga');
 const session = require('express-session');
 const authRoutes = require('./routes/auth');
+const messagesMiddleware = require('./middleware/messagesMiddleware');
 
 //const router = express.Router();
 //const fetchUserCPF = require('./middleware/fetchUserCPF');
@@ -26,14 +27,22 @@ app.use(bodyParser.json());
 app.use(session({
     secret: 'sua_chave_secreta',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {maxAge: 70 * 60 * 1000 },
    // store: 
 }));
 
+app.use((req, res, next) => {
+    console.log('Estado da sessão:', req.session);
+    next();
+})
+
 // Inicialização do Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use(messagesMiddleware);
 
 // Use as rotas de autenticação
 app.use('/auth', authRoutes);
