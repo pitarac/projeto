@@ -5,4 +5,4 @@ function ensureNotAuthenticated(req, res, next) {
   next();
 }
 
-module.exports = ensureNotAuthenticated;
+module.exports = ensureNotAuthenticated; 

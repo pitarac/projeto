@@ -10,3 +10,6 @@ User.findAll()
     console.error('Erro ao buscar usuários:', err);
     // Trate os erros adequadamente
   });
+
+
+  

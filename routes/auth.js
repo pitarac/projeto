@@ -47,3 +47,4 @@ router.get('/index', ensureAuthenticated, userController.renderIndexPage);
 
 
 module.exports = router;
+  
